@@ -152,9 +152,9 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
       wireInteractions(map);
       onReady?.();
       onZoom?.(map.getZoom());
-      // Kick the render loop — in a flex layout the canvas can boot at 0×0,
-      // and while glyphs/tiles are still resolving maplibre may defer its
-      // first paint until an interaction. redraw() forces a synchronous frame.
+      // Kick the render loop — in a flex layout the canvas can boot at 0×0, and
+      // when the tab is backgrounded requestAnimationFrame is throttled so
+      // maplibre may defer its first paint. redraw() forces a synchronous frame.
       let kicks = 0;
       const kick = setInterval(() => {
         try {
@@ -163,8 +163,23 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
         } catch {
           /* ignore */
         }
-        if (++kicks > 16) clearInterval(kick);
-      }, 250);
+        if (++kicks > 40) clearInterval(kick);
+      }, 400);
+      const onVisible = () => {
+        if (document.visibilityState === "visible") {
+          map.resize();
+          try {
+            map.redraw();
+          } catch {
+            /* ignore */
+          }
+        }
+      };
+      document.addEventListener("visibilitychange", onVisible);
+      map.once("remove", () => {
+        clearInterval(kick);
+        document.removeEventListener("visibilitychange", onVisible);
+      });
     });
     map.on("styledata", () => {
       if (loadedRef.current && !map.getLayer(FIRST_APP_LAYER)) {
@@ -850,9 +865,8 @@ function ensureAppLayers(map: maplibregl.Map) {
     layout: { "line-join": "round", "line-cap": "round" },
     paint: {
       "line-color": lbColorMatch(),
-      "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.8, 14, 3.5],
-      "line-opacity": 1,
-      "line-dasharray": [2.5, 1.2],
+      "line-width": ["interpolate", ["linear"], ["zoom"], 10, 2.2, 14, 4],
+      "line-opacity": 0.95,
     },
   });
 
