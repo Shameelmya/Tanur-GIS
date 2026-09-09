@@ -10,24 +10,30 @@ import { PROCESSED, PUBLIC_DATA, readJSON, writeJSON, log } from "./lib.mjs";
 
 async function simplify(name, pct) {
   const src = readJSON(join(PROCESSED, `${name}.geojson`));
-  const res = await mapshaper.applyCommands(
-    `-i in.geojson -simplify ${pct}% keep-shapes -clean -o out.geojson format=geojson`,
-    { "in.geojson": JSON.stringify(src) }
-  );
-  const out = JSON.parse(res["out.geojson"]);
-  // mapshaper drops to GeometryCollection when features have no props; guard
-  if (out.type === "FeatureCollection") {
-    writeJSON(join(PUBLIC_DATA, `${name}.geojson`), out);
-    return out.features.length;
+  try {
+    const res = await mapshaper.applyCommands(
+      `-i in.geojson -simplify ${pct}% keep-shapes -clean -o out.geojson format=geojson`,
+      { "in.geojson": JSON.stringify(src) }
+    );
+    const raw = res["out.geojson"];
+    const out = raw ? JSON.parse(raw) : null;
+    if (out && out.type === "FeatureCollection" && out.features.length === src.features.length) {
+      writeJSON(join(PUBLIC_DATA, `${name}.geojson`), out);
+      return out.features.length;
+    }
+  } catch (e) {
+    log(`simplify ${name} failed (${e.message}) — copying full resolution`);
   }
   copyFileSync(join(PROCESSED, `${name}.geojson`), join(PUBLIC_DATA, `${name}.geojson`));
   return src.features.length;
 }
 
 const LAYERS = [
+  { name: "constituency_mask", simplify: null },
   { name: "constituency", simplify: 20 },
   { name: "local_bodies", simplify: 18 },
   { name: "wards", simplify: 15 },
+  { name: "water", simplify: 12 },
   { name: "roads", simplify: null },
   { name: "railway", simplify: null },
   { name: "bridges", simplify: null },

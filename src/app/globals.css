@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-surface-muted text-ink antialiased;
+}
+
+/* MapLibre overrides to match the app shell */
+.maplibregl-map {
+  font: inherit;
+}
+
+.maplibregl-ctrl-group {
+  @apply rounded-lg border border-line shadow-panel;
+}
+
+.maplibregl-ctrl-group button {
+  @apply w-8 h-8;
+}
+
+.maplibregl-popup-content {
+  @apply rounded-lg border border-line shadow-panel px-3 py-2 text-sm;
+}
+
+.maplibregl-ctrl-attrib {
+  @apply text-[10px] leading-tight;
+}
+
+/* Thin scrollbars in panels */
+.panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.panel-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.16s ease-out;
+}

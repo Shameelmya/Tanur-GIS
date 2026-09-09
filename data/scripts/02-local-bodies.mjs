@@ -42,6 +42,7 @@ const features = LOCAL_BODIES.map((lb) => {
     type: "Feature",
     properties: {
       id: lb.id,
+      local_body_id: lb.id,
       name: lb.name,
       name_ml: NAME_ML[lb.id] || "",
       type: lb.type,

@@ -55,6 +55,26 @@ const feature = {
 };
 
 writeJSON(join(PROCESSED, "constituency.geojson"), fc([feature]));
+
+// Inverted mask: a world-covering polygon with the constituency punched out,
+// used to grey-out everything outside the constituency on the map.
+const outerRing = [
+  [-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85],
+];
+const holes =
+  geometry.type === "MultiPolygon"
+    ? geometry.coordinates.map((poly) => poly[0])
+    : [geometry.coordinates[0]];
+writeJSON(
+  join(PROCESSED, "constituency_mask.geojson"),
+  fc([
+    {
+      type: "Feature",
+      properties: { id: "tanur-ac-44-mask" },
+      geometry: { type: "Polygon", coordinates: [outerRing, ...holes] },
+    },
+  ])
+);
 writeJSON(join(PROCESSED, "constituency.geojson.meta.json"), {
   dataset: "constituency",
   method: "dissolve2 of processed/local_bodies.geojson",

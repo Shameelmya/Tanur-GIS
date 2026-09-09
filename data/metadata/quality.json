@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-09T09:30:21.573Z",
+  "generated": "2026-09-09T09:56:20.608Z",
   "datasets": {
     "bridges": {
       "features": 37,
@@ -12,6 +12,16 @@
       "selfIntersections": 0
     },
     "constituency": {
+      "features": 1,
+      "geometryTypes": {
+        "Polygon": 1
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 0,
+      "selfIntersections": 0
+    },
+    "constituency_mask": {
       "features": 1,
       "geometryTypes": {
         "Polygon": 1
@@ -74,6 +84,18 @@
       "emptyName": 0,
       "unverified": 0,
       "selfIntersections": 0
+    },
+    "water": {
+      "features": 248,
+      "geometryTypes": {
+        "Polygon": 162,
+        "LineString": 69,
+        "MultiLineString": 17
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 0,
+      "selfIntersections": 1
     }
   },
   "issues": []
