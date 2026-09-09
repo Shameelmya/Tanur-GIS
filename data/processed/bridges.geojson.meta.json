@@ -1,0 +1,9 @@
+{
+  "dataset": "bridges",
+  "features": 37,
+  "named": 5,
+  "status": "SEED ONLY — incomplete. Complete via admin '+ Add Bridge'.",
+  "source": "OpenStreetMap via Overpass API",
+  "license": "ODbL 1.0",
+  "generated": "2026-09-09T09:27:48.573Z"
+}

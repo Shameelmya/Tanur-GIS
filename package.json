@@ -1,0 +1,43 @@
+{
+  "name": "tanur-constituency-gis",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Interactive GIS web application for the Tanur Assembly Constituency, Malappuram, Kerala",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "data:wards": "node data/scripts/01-wards.mjs",
+    "data:local-bodies": "node data/scripts/02-local-bodies.mjs",
+    "data:boundary": "node data/scripts/03-constituency-boundary.mjs",
+    "data:roads": "node data/scripts/04-roads.mjs",
+    "data:railway": "node data/scripts/05-railway.mjs",
+    "data:bridges": "node data/scripts/06-bridges-seed.mjs",
+    "data:pois": "node data/scripts/07-pois-seed.mjs",
+    "data:validate": "node data/scripts/98-validate.mjs",
+    "data:manifest": "node data/scripts/99-manifest.mjs",
+    "data:all": "npm run data:wards && npm run data:local-bodies && npm run data:boundary && npm run data:roads && npm run data:railway && npm run data:bridges && npm run data:pois && npm run data:validate && npm run data:manifest",
+    "seed:firestore": "node data/scripts/seed-firestore.mjs"
+  },
+  "dependencies": {
+    "firebase": "^10.14.1",
+    "maplibre-gl": "^4.7.1",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@turf/turf": "^7.1.0",
+    "@types/node": "^22.7.5",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.20",
+    "firebase-admin": "^12.6.0",
+    "mapshaper": "^0.6.102",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.3"
+  }
+}

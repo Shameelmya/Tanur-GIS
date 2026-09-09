@@ -1,0 +1,9 @@
+{
+  "dataset": "roads",
+  "features": 1605,
+  "named": 92,
+  "unnamed": 1513,
+  "source": "OpenStreetMap via Overpass API",
+  "license": "ODbL 1.0",
+  "generated": "2026-09-09T09:24:56.431Z"
+}

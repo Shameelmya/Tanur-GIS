@@ -1,0 +1,102 @@
+{
+  "generated": "2026-09-09T09:30:22.038Z",
+  "constituency": {
+    "id": "tanur-ac-44",
+    "name": "Tanur",
+    "name_ml": "തനൂർ",
+    "number": 44,
+    "type": "assembly_constituency",
+    "district": "Malappuram",
+    "taluk": "Tirur",
+    "parliamentary_constituency": "Malappuram",
+    "local_body_count": 6,
+    "ward_count": 147,
+    "area_km2": 82.5,
+    "local_bodies": [
+      "Tanur",
+      "Ozhur",
+      "Ponmundam",
+      "Thanaloor",
+      "Niramaruthoor",
+      "Cheriyamundam"
+    ],
+    "source": "Derived: union of the six component Local Self Government Institutions (themselves dissolved from 2024 Delimitation Commission ward polygons). Composition per ECI Delimitation of Constituencies Order 2008 (via Wikipedia; pending cross-check against the original notification).",
+    "confidence": "medium-high",
+    "acquired": "2026-09-09"
+  },
+  "layers": [
+    {
+      "name": "constituency",
+      "features": 1,
+      "dataset": "constituency",
+      "method": "dissolve2 of processed/local_bodies.geojson",
+      "area_km2": 82.5,
+      "generated": "2026-09-09T09:30:21.147Z"
+    },
+    {
+      "name": "local_bodies",
+      "features": 6,
+      "dataset": "local_bodies",
+      "method": "dissolve2 of processed/wards.geojson grouped by local body",
+      "generated": "2026-09-09T09:30:20.574Z"
+    },
+    {
+      "name": "wards",
+      "features": 147,
+      "dataset": "wards",
+      "local_bodies": 6,
+      "source": "Delimitation Commission, Kerala (2024) via wardmap.ksmart.live",
+      "license": "Government of Kerala data — attribute to the Delimitation Commission; reuse terms to be confirmed",
+      "generated": "2026-09-09T09:30:08.995Z"
+    },
+    {
+      "name": "roads",
+      "features": 1605,
+      "dataset": "roads",
+      "named": 92,
+      "unnamed": 1513,
+      "source": "OpenStreetMap via Overpass API",
+      "license": "ODbL 1.0",
+      "generated": "2026-09-09T09:24:56.431Z"
+    },
+    {
+      "name": "railway",
+      "features": 14,
+      "dataset": "railway",
+      "lines": 13,
+      "stations": 1,
+      "source": "OpenStreetMap via Overpass API",
+      "license": "ODbL 1.0",
+      "generated": "2026-09-09T09:27:38.313Z"
+    },
+    {
+      "name": "bridges",
+      "features": 37,
+      "dataset": "bridges",
+      "named": 5,
+      "status": "SEED ONLY — incomplete. Complete via admin '+ Add Bridge'.",
+      "source": "OpenStreetMap via Overpass API",
+      "license": "ODbL 1.0",
+      "generated": "2026-09-09T09:27:48.573Z"
+    },
+    {
+      "name": "places",
+      "features": 188,
+      "dataset": "places",
+      "by_category": {
+        "school": 95,
+        "government": 44,
+        "health": 49
+      },
+      "status": "SEED — OSM only. Authoritative: KITE/Sametham (schools), DHS (health), LSGD (offices).",
+      "source": "OpenStreetMap via Overpass API",
+      "license": "ODbL 1.0",
+      "generated": "2026-09-09T09:28:00.869Z"
+    }
+  ],
+  "attribution": [
+    "Ward & boundary geometry: Delimitation Commission, Kerala — 2024 ward delimitation (wardmap.ksmart.live)",
+    "Roads, railway, seed POIs & bridges: © OpenStreetMap contributors (ODbL)",
+    "Local-body reference IDs: opendatakerala/lsg-kerala-data (ODbL)"
+  ]
+}

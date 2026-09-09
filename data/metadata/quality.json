@@ -1,0 +1,80 @@
+{
+  "generated": "2026-09-09T09:30:21.573Z",
+  "datasets": {
+    "bridges": {
+      "features": 37,
+      "geometryTypes": {
+        "Point": 37
+      },
+      "nullGeometry": 0,
+      "emptyName": 32,
+      "unverified": 37,
+      "selfIntersections": 0
+    },
+    "constituency": {
+      "features": 1,
+      "geometryTypes": {
+        "Polygon": 1
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 0,
+      "selfIntersections": 0
+    },
+    "local_bodies": {
+      "features": 6,
+      "geometryTypes": {
+        "MultiPolygon": 3,
+        "Polygon": 3
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 0,
+      "selfIntersections": 0
+    },
+    "places": {
+      "features": 188,
+      "geometryTypes": {
+        "Point": 188
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 188,
+      "selfIntersections": 0
+    },
+    "railway": {
+      "features": 14,
+      "geometryTypes": {
+        "LineString": 13,
+        "Point": 1
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 1,
+      "selfIntersections": 0
+    },
+    "roads": {
+      "features": 1605,
+      "geometryTypes": {
+        "LineString": 1581,
+        "MultiLineString": 24
+      },
+      "nullGeometry": 0,
+      "emptyName": 1534,
+      "unverified": 1605,
+      "selfIntersections": 0
+    },
+    "wards": {
+      "features": 147,
+      "geometryTypes": {
+        "MultiPolygon": 3,
+        "Polygon": 144
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 0,
+      "selfIntersections": 0
+    }
+  },
+  "issues": []
+}

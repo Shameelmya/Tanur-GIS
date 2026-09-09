@@ -1,0 +1,8 @@
+{
+  "dataset": "railway",
+  "lines": 13,
+  "stations": 1,
+  "source": "OpenStreetMap via Overpass API",
+  "license": "ODbL 1.0",
+  "generated": "2026-09-09T09:27:38.313Z"
+}
