@@ -1,0 +1,62 @@
+rules_version = '2';
+
+// Tanur Constituency GIS — Firestore security rules
+//
+// Model:
+//  - Anyone signed in can READ feature metadata and audit logs (viewers).
+//  - Only users whose /users/{uid}.role == "admin" can WRITE feature metadata,
+//    create manual features, archive, or append audit entries.
+//  - A user may create their own /users/{uid} doc once, as a viewer, and may
+//    never change their own role.
+//
+// Promote the first administrator by editing their /users/{uid} document in the
+// Firebase console and setting role: "admin".
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    // ---- users ----
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+
+      // self-provision as a viewer only
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.role == "viewer";
+
+      // only an admin can change roles / other users
+      allow update, delete: if isAdmin()
+        && request.resource.data.uid == resource.data.uid;
+    }
+
+    // ---- editable feature layers ----
+    match /roads/{id}        { allow read: if signedIn(); allow write: if isAdmin(); }
+    match /bridges/{id}      { allow read: if signedIn(); allow write: if isAdmin(); }
+    match /places/{id}       { allow read: if signedIn(); allow write: if isAdmin(); }
+
+    // ---- reference layers (metadata overrides, if ever used) ----
+    match /wards/{id}          { allow read: if signedIn(); allow write: if isAdmin(); }
+    match /local_bodies/{id}   { allow read: if signedIn(); allow write: if isAdmin(); }
+
+    // ---- audit trail: append-only, admin-written, viewer-readable ----
+    match /audit_logs/{id} {
+      allow read: if signedIn();
+      allow create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
