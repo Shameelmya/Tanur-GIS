@@ -1,14 +1,14 @@
 {
-  "generated": "2026-09-09T09:56:20.608Z",
+  "generated": "2026-09-11T10:02:47.712Z",
   "datasets": {
     "bridges": {
-      "features": 37,
+      "features": 38,
       "geometryTypes": {
-        "Point": 37
+        "Point": 38
       },
       "nullGeometry": 0,
-      "emptyName": 32,
-      "unverified": 37,
+      "emptyName": 31,
+      "unverified": 38,
       "selfIntersections": 0
     },
     "constituency": {
@@ -43,6 +43,16 @@
       "selfIntersections": 0
     },
     "places": {
+      "features": 196,
+      "geometryTypes": {
+        "Point": 196
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 190,
+      "selfIntersections": 0
+    },
+    "places_osm_seed": {
       "features": 188,
       "geometryTypes": {
         "Point": 188
@@ -72,6 +82,16 @@
       "nullGeometry": 0,
       "emptyName": 1534,
       "unverified": 1605,
+      "selfIntersections": 0
+    },
+    "schools_official": {
+      "features": 12,
+      "geometryTypes": {
+        "Point": 12
+      },
+      "nullGeometry": 0,
+      "emptyName": 0,
+      "unverified": 12,
       "selfIntersections": 0
     },
     "wards": {

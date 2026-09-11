@@ -21,6 +21,13 @@ next-env.d.ts
 # GIS raw downloads (large; reproducible via data/scripts)
 /data/raw/*
 !/data/raw/.gitkeep
+# Manually researched source data (not re-downloadable by re-running a
+# script — these ARE the source, not a reproducible cache) and the Nominatim
+# geocode caches that make re-runs deterministic without re-hitting the API.
+!/data/raw/sametham_tanur_schools_raw.txt
+!/data/raw/offices_health_research_notes.json
+!/data/raw/nominatim_schools_cache.json
+!/data/raw/nominatim_offices_cache.json
 /data/scripts/.cache/
 
 # misc

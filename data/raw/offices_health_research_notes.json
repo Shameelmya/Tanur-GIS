@@ -1,0 +1,143 @@
+{
+  "_comment": "Manually researched from official Government of Kerala sources, 2026-09-11. Coordinates from landrevenue.kerala.gov.in 'Locate Us' embedded Google Maps pins (official) unless noted otherwise (geocoded). Cross-check each against the correct local body polygon before trusting; a mismatch is flagged, not silently used.",
+  "village_offices": [
+    {
+      "name": "Tanur Village Office",
+      "name_ml": "താനൂര്‍ വില്ലേജ് ഓഫീസ്",
+      "address": "Parappanangadi Road, Block Jn, Tanur",
+      "landmark": "Tanur Block Panchayath Office",
+      "pincode": "676302",
+      "phone": "8547615512",
+      "email": "vo-tanur.rev@kerala.gov.in",
+      "taluk": "Tirur",
+      "local_body": "Tanur",
+      "ward": 34,
+      "established": "1970-01-01",
+      "lat": 10.98468,
+      "lon": 75.87529,
+      "source": "https://landrevenue.kerala.gov.in/core/Office_websites/contactus.php?nm=494Tanurvillageoffice"
+    },
+    {
+      "name": "Ozhur Village Office",
+      "name_ml": "ഒഴൂര്‍ വില്ലേജ് ഓഫീസ്",
+      "address": "Pulpparambu-Nalidavazhi Road, Ozhur",
+      "landmark": "Near Grama Panchayat Office, Ozhur",
+      "pincode": "676307",
+      "phone": "8547615513",
+      "email": "vo-ozhur.rev@kerala.gov.in",
+      "taluk": "Tirur",
+      "local_body": "Ozhur",
+      "ward": 5,
+      "established": "1970-01-01",
+      "lat": 10.98039,
+      "lon": 75.919523,
+      "source": "https://landrevenue.kerala.gov.in/core/Office_websites/contactus.php?nm=1367Ozhurvillageoffice"
+    },
+    {
+      "name": "Ponmundam Village Office",
+      "name_ml": "പൊന്‍മുണ്ടം വില്ലേജ് ഓഫീസ്",
+      "address": "Ponmundam",
+      "landmark": "Near Vailathur",
+      "pincode": "676106",
+      "phone": "8547615514",
+      "email": "vo-ponmumdam.rev@kerala.gov.in",
+      "taluk": "Tirur",
+      "local_body": "Ponmundam",
+      "ward": 11,
+      "established": "1987-01-12",
+      "lat": 10.9497,
+      "lon": 75.94842,
+      "coordinate_caution": "identical (to 3dp) to the Cheriyamundam VO pin below — likely a copy-paste error in the government CMS; verify against ward polygon before trusting, discard if it falls outside Ponmundam",
+      "source": "https://landrevenue.kerala.gov.in/core/Office_websites/contactus.php?nm=243PonmundamVillageOffice"
+    },
+    {
+      "name": "Cheriyamundam Village Office",
+      "name_ml": "ചെറിയമുണ്ടം വില്ലേജ് ഓഫീസ്",
+      "address": "Cheriyamundam",
+      "landmark": "Banglavumkunnu",
+      "pincode": "676106",
+      "phone": "8547615515",
+      "email": "vo-cheriyamundam.rev@kerala.gov.in",
+      "taluk": "Tirur",
+      "local_body": "Cheriyamundam",
+      "ward": 2,
+      "established": "1970-01-01",
+      "lat": 10.949364,
+      "lon": 75.948443,
+      "source": "https://landrevenue.kerala.gov.in/core/Office_websites/contactus.php?nm=1366Cheriyamundamvillageoffice"
+    },
+    {
+      "name": "Niramaruthur Village Office",
+      "name_ml": "നിറമരൂതൂര്‍ വില്ലേജ് ഓഫീസ്",
+      "address": "Niramaruthur",
+      "landmark": "Near Kondempat Temple",
+      "pincode": "676109",
+      "phone": "8547615519",
+      "email": "vo-niramaruthur.rev@kerala.gov.in",
+      "taluk": "Tirur",
+      "local_body": "Niramaruthoor",
+      "ward": 3,
+      "established": "1987-02-09",
+      "lat": 10.926992,
+      "lon": 75.891558,
+      "source": "https://landrevenue.kerala.gov.in/core/Office_websites/contactus.php?nm=493Niramaruthurvillageoffice"
+    },
+    {
+      "name": "Tanalur Village Office",
+      "name_ml": "താനാളൂര്‍ വില്ലേജ് ഓഫീസ്",
+      "address": "Tanalur",
+      "landmark": "1 km from Vattathani Jn towards east, near Tanalur",
+      "pincode": "676307",
+      "phone": "8547615511",
+      "email": "vo-tanalur.rev@kerala.gov.in",
+      "taluk": "Tirur",
+      "local_body": "Thanaloor",
+      "ward": 5,
+      "established": "2004-02-28",
+      "lat": 10.951974,
+      "lon": 75.908914,
+      "source": "https://landrevenue.kerala.gov.in/core/Office_websites/contactus.php?nm=41Tanalurvillageoffice"
+    }
+  ],
+  "krishi_bhavans": [
+    { "name": "Krishi Bhavan Tanur", "phone": "9383471684", "email": "kbthanurmlp.agri@kerala.gov.in", "block": "Ponmundam", "geocode_query": "Krishi Bhavan, Tanur, Malappuram, Kerala" },
+    { "name": "Krishi Bhavan Ozhur", "phone": "9383471680", "email": "kbozhurmlp.agri@kerala.gov.in", "block": "Ponmundam", "geocode_query": "Krishi Bhavan, Ozhur, Malappuram, Kerala" },
+    { "name": "Krishi Bhavan Ponmundam", "phone": "9383471682", "email": "kbpnmdammlp.agri@kerala.gov.in", "block": "Ponmundam", "geocode_query": "Krishi Bhavan, Ponmundam, Malappuram, Kerala" }
+  ],
+  "police": [
+    { "name": "Tanur Police Station", "address": "Police Station Rd, Tanur", "pincode": "676302", "phone": "0494-2440221", "mobile": "9497987167", "email": "sitanurpsmpm.pol@kerala.gov.in", "source": "https://ps.keralapolice.gov.in/tanur-ps/contacts" }
+  ],
+  "health_facilities": [
+    { "name": "Tanur Community Health Centre (CHC)", "type": "CHC", "address": "Hospital Road, Tanur Nagaram", "pincode": "676302", "phone": "0494-2443684", "sub_centres": ["Edakadapuram", "Rayiramangal"], "geocode_query": "Hospital Road, Tanur, Malappuram, Kerala", "source": "https://www.digitalkeralam.com/widget/?widgetid=3049 ; https://www.quickerala.com/malappuram/tanur/community-health-center-thanur/387418" },
+    { "name": "Primary Health Centre Ponmundam", "type": "PHC", "address": "Thirur Vailathur Puthanathani Road, Kaliyakkal, Ponmundam", "pincode": "676106", "source": "https://www.mappls.com/place-primary+health+centre+ponmundam" },
+    { "name": "Primary Health Centre Cheriyamundam", "type": "PHC", "note": "listed as PHC #105 in the Malappuram district list; sub-centre Iringavoor", "source": "arogyakeralam.gov.in sub-centre list" },
+    { "name": "Family Health Centre Tanalur", "type": "FHC", "address": "Tanalur", "note": "sub-centres Pakra and K Puram; Tanalur GP, Tanur (Thanur) Block Panchayath", "source": "digitalkeralam.com widget 3376" },
+    { "name": "Primary Health Centre Niramaruthur", "type": "PHC", "address": "Thevarkadappuram, Niramaruthur", "phone": "0494-2427155", "source": "web search — Niramaruthur GP, Tanur Block" },
+    { "name": "Primary Health Centre Ozhur", "type": "PHC", "note": "sub-centre Ayyaya", "source": "web search — needs exact address confirmation" }
+  ],
+  "notable_bridges": [
+    {
+      "name": "Thooval Theeram Floating Bridge (Ottumpuram Beach)",
+      "description": "A ~100 m pedestrian floating bridge into the sea at Ottumpuram / Thooval Theeram beach, Tanur — Kerala's first such structure. Inaugurated 23 April 2023 by Tourism Minister P.A. Mohammed Riyas.",
+      "osm_reference_point": "OSM node 4570963189 'Thooval Theeram Ottumpuram Beach. Tanur' — 11°01'14\"N 75°51'23\"E (approx. 11.0206, 75.8564)",
+      "source": [
+        "https://www.onmanorama.com/travel/kerala/2023/04/25/malappuram-ottumpuram-thooval-theeram-beach-floating-bridge.html",
+        "https://www.dtnext.in/videos/2023/04/24/floating-bridge-inaugurated-at-tanur",
+        "https://www.openstreetmap.org/node/4570963189"
+      ]
+    },
+    {
+      "name": "Tanur–Theyyala Road Railway Over Bridge (ROB)",
+      "description": "Road-over-rail bridge on the Tanur–Theyyala road, Tanur town, carrying the road over the Shoranur–Mangaluru railway line. Declared 03/01/2020; construction documented as in progress in 2023 (Tanur Municipality Facebook, Oct 2023).",
+      "source": [
+        "https://malappuram.nic.in/en/document/tanur-town-theyyala-rob-declaration/",
+        "https://www.facebook.com/TanurMalappuram/videos/tanur-theyyala-road-railway-over-bridge-rob-work-in-progress-30-10-23/7005682076163329/"
+      ]
+    },
+    {
+      "name": "Chamravattom Regulator-cum-Bridge",
+      "description": "978 m regulator-cum-bridge across the Bharathapuzha (Nila) river near Chamravattom/Triprangode, connecting Tirur and Ponnani taluks. Inaugurated 17 May 2012. Location needs checking against the Tanur AC boundary — it sits on the Tirur/Ponnani taluk boundary, likely just outside or on the southern edge near Niramaruthoor/Thanaloor.",
+      "source": ["https://en.wikipedia.org/wiki/Chamravattom_Regulator-cum-Bridge", "https://irrigation.kerala.gov.in/chamravattom-regulator-cum-bridge"]
+    }
+  ]
+}

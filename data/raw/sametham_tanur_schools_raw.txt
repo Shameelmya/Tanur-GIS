@@ -1,0 +1,81 @@
+Source: https://sametham.kite.kerala.gov.in/search/advanced_search_v2 (Advanced Search, Assembly Constituency = Tanur)
+KITE - Kerala School Data Bank (Sametham), official Government of Kerala data
+Acquired: 2026-09-11
+Data updated (per portal): 27 Jun 2026
+73 Schools Found. Government: 30, Aided: 31, Unaided/Other: 12
+
+Columns: # | SCHOOL_CODE | SCHOOL_NAME | BLOCK/LOCAL_BODY | ASSEMBLY | PARLIAMENTARY | MANAGEMENT | LEVEL | STUDENTS | TEACHERS | CONTACT
+
+1	HS:19024	G. H. S. S. Kattilangadi	Tanur(M)	Tanur	Ponnani	Government	1 - 12	2172	57	04942441085
+2	HS:19025	S. M. M. H. S.S Rayirimangalam	Tanur(M)	Tanur	Ponnani	Aided	8 - 12	2257	70	04942083724
+3	HS:19026	D. G. H. S. S. Tanur	Tanur Malappuram(P)	Tanur	Ponnani	Government	5 - 12	4739	106	04942584682
+4	HS:19027	GOVT. REGIONAL FISHERIES TECHNICAL V H S S, THANUR	Tanur(M)	Tanur	Ponnani	Government	8 - 12	1460	2	04942443721
+5	HS:19029	C. P. P. H. M. H. S. Ozhur	Tanur Malappuram(P)	Tanur	Ponnani	Aided	8 - 12	1577	34	04942582155
+6	HS:19067	G. H. S. S. Cheriyamundam	Tanur Malappuram(P)	Tanur	Ponnani	Government	5 - 12	1307	17	04942589700
+7	HS:19079	G. H. S. S. Niramaruthur	Tanur Malappuram(P)	Tanur	Ponnani	Government	8 - 12	2429	48	04942422879
+8	HS:19085	M. T. I. H. S. Thalakkadathur	Tanur Malappuram(P)	Tanur	Ponnani	Unaided Recognised	1 - 12	689		04942588080
+9	HS:19101	H. S. M. E. M. M. H. S. S. Tanur	Tanur(M)	Tanur	Ponnani	Unaided Recognised	1 - 12	1632		9497451181
+10	HS:19119	G. H. S. S. Ponmundam	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 12	1470	46	04942588686
+11	HS:19131	Crescent English School, Tanalur	Tanur Malappuram(P)	Tanur	Ponnani	Unaided Recognised	1 -10	795		04942580041
+12	LP:19601	A. M. L. P. S. Adrisseri	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	297	9	04942495266
+13	LP:19603	Al Ameen E. M. L. P. S. Vailathur	Tanur Malappuram(P)	Tanur	Ponnani	Unaided Recognised	1 - 4	233		04942585355
+14	LP:19606	A. M. L. P. S. Ayyaya	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	170	9	9745287744
+15	LP:19607	G. M. L. P. S. Edakadappuram	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 4	153	9	04942444068
+16	LP:19608	A. M. L. P. S. Cheerankadappuram	Tanur(M)	Tanur	Ponnani	Aided	1 - 4	233	11	04942440025
+17	LP:19609	G. M. L. P. S. Iringavoor	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 4	69	6	04942585000
+18	LP:19610	A. M. L. P. S. Cheriyamundam	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	52		04942587120
+19	LP:19614	A. M. L. P. S. Chilavil West	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	153	9	7736880430
+20	LP:19615	A. M. L. P. S. Chilavil	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	233	10	9847423423
+21	LP:19616	G. M. L. P. S. Korad	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 4	266	13	04942583350
+22	LP:19618	A. M. L. P. S. Eranellur	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	80	4	9605184662
+23	LP:19619	G. M. L. P. S. Manalipuzha	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 4	68	5	9946368230
+24	LP:19620	A. M. L. P. S. Iringavoor North	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	63	3	9846447920
+25	LP:19621	A. M. L. P. S. Ittilakkal	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	418	8	9744658444
+26	LP:19624	G. M. L. P. S. Panangattur	Tanur(M)	Tanur	Ponnani	Government	1 - 4	163	9	9605115089
+27	LP:19626	G. M. L. P. S. Parapputhadam	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 4	73	5	04942588284
+28	LP:19629	G. L. P. S. Rayirimangalam	Tanur(M)	Tanur	Ponnani	Government	1 - 4	100	7	04942441940
+29	LP:19631	G. M. L. P. S. Ponmundam South	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 4	111	7	04942585058
+30	LP:19633	G. M. L. P. S. Puthiyakadppuram North	Tanur(M)	Tanur	Ponnani	Government	1 - 4	200	11	04942444241
+31	LP:19634	A. M. L. P. S. Korangath	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	449	11	9495639088
+32	LP:19635	G. L. P. S. Rayirimangalam East	Tanur(M)	Tanur	Ponnani	Government	1 - 4	175	9	9446388965
+33	LP:19636	A. M. L. P. S. Kormanthala	Tanur(M)	Tanur	Ponnani	Government	1 - 4	132	9	9495070849
+34	LP:19637	G. M. L. P. S. Rayirimangalam	Tanur(M)	Tanur	Ponnani	Government	1 - 4	88	7	04942440899
+35	LP:19640	G. M. L. P. S. Tanur North	Tanur(M)	Tanur	Ponnani	Government	1 - 4	197	9	04942443361
+36	LP:19642	G. M. L. P. S. Thalakadathur	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 4	72	6	04942587160
+37	LP:19643	N. M. A. L. P. S. K.Puram	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	245	9	9354513109
+38	LP:19645	A. M. L. P. S. Omachapuzha	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	292	9	9847586764
+39	LP:19647	A. M. L. P. S. Pakara	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	113	7	9895113142
+40	LP:19649	A. M. L. P. S. Patham pad	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	17	5	9447405673
+41	LP:19650	A. M. L. P. S. Ponmundam North	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	243	10	9745676029
+42	LP:19651	A. L. P. S. Puthentheru	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	304	11	9961971355
+43	LP:19652	A. L. P. S. Puthu kulangara	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	287	14	9497882404
+44	LP:19653	A. M. L. P. S. Thalakkadathur North	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	182	9	9495624347
+45	LP:19654	A. M. L. P. S. Thalakkottur	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	146	9	9656037392
+46	LP:19655	A. M. L. P. S. Tanalur	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	332	9	8089816070
+47	LP:19657	A. M. L. P. S. Vallikanhiram	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 4	251	10	9747400243
+48	LP:19660	G. L. P. S. K.Puram	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 5	361	17	04942445040
+49	LP:19662	G. L. P. S. Ozhur	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 5	327	14	9562313328
+50	LP:19663	G. L. P. S. Pariyapuram	Tanur(M)	Tanur	Ponnani	Government	1 - 5	271	11	04942441133
+51	LP:19664	G. L. P. S. Tanur	Tanur(M)	Tanur	Ponnani	Government	1 - 5	417	18	2440320
+52	UP:19666	A. M. U. P. S. Areekad	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 7	1542	31	9745125072
+53	UP:19667	G. U. P. S. Karingappara	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 7	834	36	04942489151
+54	UP:19670	S. V. A. U. P. S. Iringavur	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 7	603	24	9946119950
+55	HS:19671	G H S Meenadathur	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 -10	1735	64	04942584020
+56	UP:19673	G. M. U. P. S. Tanur Town	Tanur(M)	Tanur	Ponnani	Government	1 - 7	602	28	04942445170
+57	UP:19676	A. U. P. S. Pariyapuram Central	Tanur(M)	Tanur	Ponnani	Aided	1 - 7	1120	25	04942440179
+58	UP:19677	A. M. U. P. S. GNANAPRABHA	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 7	590	24	8086568637
+59	UP:19678	A. M. U. P. S. Vaniyannur	Tanur Malappuram(P)	Tanur	Ponnani	Aided	1 - 7	364	14	9846196301
+60	UP:19679	G. M. U. P. S. Cheerankadappuram	Tanur(M)	Tanur	Ponnani	Government	5 -7	573	20	04942444004
+61	HS:19680	Al Noor High School Panangattur	Tanur(M)	Tanur	Ponnani	Unaided Recognised	1 -10	361		2443786
+62	UP:19681	A. M. U. P. S. Ayyaya	Tanur Malappuram(P)	Tanur	Ponnani	Aided	5 -7	1173	42	04942584100
+63	UP:19682	P. M. S. A. M. U. P. S. Cherumukku	Tirurangadi Malappuram(P)	Tanur	Ponnani	Aided	5 -7	446	16	N/A
+64	UP:19685	S. M. U. P. S. Tanur	Tanur Malappuram(P)	Tanur	Ponnani	Aided	5 -7	896	28	04942440107
+65	UP:19686	K. P. N. M. U. P. S. Tanur	Tanur(M)	Tanur	Ponnani	Government	5 -7	127	9	04942444786
+66	UP:19687	I. U. P. S. Tanalur	Tanur Malappuram(P)	Tanur	Ponnani	Unaided Recognised	1 - 7	124		8547006576
+67	LP:19692	Makhdoomiya Islamic English School Kavappara	Tanur Malappuram(P)	Tanur	Ponnani	Unaided Recognised	1 - 4	189		04942499199
+68	LP:19693	Sunni Centre English School Attanikkal	Tanur Malappuram(P)	Tanur	Ponnani	Unaided Recognised	1 - 4	142		04942587110
+69	LP:19694	Saraswathy Vidya Nikethan Kalad	Tanur Malappuram(P)	Tanur	Ponnani	Unaided Recognised	1 - 4	50		04942422212
+70	UP:19699	G. U. P. S Niramaruthur	Tanur Malappuram(P)	Tanur	Ponnani	Government	1 - 7	993	42	N/A
+71	HS:50060	Pleasant E M School Tanur	Tanur(M)	Tanur	Ponnani	Unaided Recognised	1 -10	446		9142934925
+72	HS:50061	ICH School Tanur	Tanur(M)	Tanur	Ponnani	Unaided Recognised	1 -10	701		04942442786
+73	LP:50064	Nice Public School Tanur	Tanur(M)	Tanur	Ponnani	Unaided Recognised	1 - 4	148		7510786931

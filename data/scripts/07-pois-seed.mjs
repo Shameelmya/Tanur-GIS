@@ -9,7 +9,7 @@
 // Health: authoritative source is the DHS / Arogya Keralam institution list
 //   (PDF only) — major facilities to be verified/added by an administrator.
 //
-// Every record is verified=false. Output: data/processed/places.geojson
+// Every record is verified=false. Output: data/processed/places_osm_seed.geojson
 
 import { join } from "node:path";
 import {
@@ -103,8 +103,8 @@ const counts = {};
 for (const f of features) counts[f.properties.category] = (counts[f.properties.category] || 0) + 1;
 
 features.sort((a, b) => a.properties.category.localeCompare(b.properties.category) || a.properties.name.localeCompare(b.properties.name));
-writeJSON(join(PROCESSED, "places.geojson"), round6(fc(features)));
-writeJSON(join(PROCESSED, "places.geojson.meta.json"), {
+writeJSON(join(PROCESSED, "places_osm_seed.geojson"), round6(fc(features)));
+writeJSON(join(PROCESSED, "places_osm_seed.geojson.meta.json"), {
   dataset: "places",
   features: features.length,
   by_category: counts,
@@ -113,4 +113,4 @@ writeJSON(join(PROCESSED, "places.geojson.meta.json"), {
   license: "ODbL 1.0",
   generated: new Date().toISOString(),
 }, true);
-log(`wrote data/processed/places.geojson  (${features.length} places: ${JSON.stringify(counts)})`);
+log(`wrote data/processed/places_osm_seed.geojson  (${features.length} places: ${JSON.stringify(counts)})`);

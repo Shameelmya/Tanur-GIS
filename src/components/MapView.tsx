@@ -10,6 +10,7 @@ import {
 } from "react";
 import maplibregl, { type MapGeoJSONFeature, type LngLatLike } from "maplibre-gl";
 import type { FeatureCollection, Geometry } from "geojson";
+import * as turf from "@turf/turf";
 import {
   LAYERS,
   ROAD_STYLE,
@@ -92,6 +93,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   const selectedRef = useRef(selected);
   const visibilityRef = useRef(visibility);
   const prevRoadIdRef = useRef<string | null>(null);
+  const pulseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [, force] = useState(0);
   const rerender = () => force((n) => n + 1);
   const [basemap, setBasemap] = useState<"plain" | "streets">("plain");
@@ -220,6 +222,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
 
     return () => {
       ro.disconnect();
+      if (pulseIntervalRef.current) clearInterval(pulseIntervalRef.current);
       map.remove();
       mapRef.current = null;
       loadedRef.current = false;
@@ -310,6 +313,45 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
         ? { type: "FeatureCollection", features: [sel!.feature as GeoJSON.Feature] }
         : { type: "FeatureCollection", features: [] }
     );
+  }, []);
+
+  /** A 3-second "radar ping" at the centre of a feature — used after jumping
+   * to a search result, so the reader can find it at a glance. */
+  const startPulse = useCallback((map: maplibregl.Map, geometry: Geometry) => {
+    const src = map.getSource("__pulse") as maplibregl.GeoJSONSource | undefined;
+    if (!src) return;
+    if (pulseIntervalRef.current) clearInterval(pulseIntervalRef.current);
+
+    let center: [number, number];
+    try {
+      const c = turf.center(turf.feature(geometry));
+      center = c.geometry.coordinates as [number, number];
+    } catch {
+      return;
+    }
+    src.setData({ type: "Feature", geometry: { type: "Point", coordinates: center }, properties: {} } as GeoJSON.Feature);
+
+    const DURATION = 3000;
+    const CYCLE = 1000; // one "ping" per second, 3 pings total
+    const startedAt = performance.now();
+    pulseIntervalRef.current = setInterval(() => {
+      const elapsed = performance.now() - startedAt;
+      if (elapsed >= DURATION) {
+        if (pulseIntervalRef.current) clearInterval(pulseIntervalRef.current);
+        pulseIntervalRef.current = null;
+        src.setData({ type: "FeatureCollection", features: [] });
+        return;
+      }
+      const t = (elapsed % CYCLE) / CYCLE; // 0..1 within the current ping
+      const ringRadius = 8 + t * 22;
+      const ringOpacity = Math.max(0, 0.75 * (1 - t));
+      const dotOpacity = 0.5 + 0.5 * Math.sin(elapsed / 140);
+      map.setPaintProperty("pulse-ring", "circle-radius", ringRadius);
+      map.setPaintProperty("pulse-ring", "circle-opacity", ringOpacity * 0.25);
+      map.setPaintProperty("pulse-ring", "circle-stroke-opacity", ringOpacity);
+      map.setPaintProperty("pulse-dot", "circle-opacity", dotOpacity);
+      map.setPaintProperty("pulse-dot", "circle-stroke-opacity", dotOpacity);
+    }, 40);
   }, []);
 
   /* ----------------------------- basemap ----------------------------- */
@@ -546,6 +588,9 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
       if (!map) return;
       const b = boundsOf(f.geometry);
       if (b) map.fitBounds(b, { padding: 90, maxZoom: 16, duration: 700 });
+      // Let the camera move land first, then ping so the ring doesn't animate
+      // while off-screen.
+      setTimeout(() => startPulse(map, f.geometry), 720);
     },
     finishDrawing,
     undoVertex,
@@ -671,6 +716,7 @@ function ensureAppLayers(map: maplibregl.Map) {
   gj("constituency_mask");
   gj("__highlight");
   gj("__draw");
+  gj("__pulse");
   registerIcons(map);
 
   const add = (layer: maplibregl.LayerSpecification, before?: string) => {
@@ -941,6 +987,16 @@ function ensureAppLayers(map: maplibregl.Map) {
   });
 
   /* ---- places — Google-Maps-style pin per category/subtype ---- */
+  // Specific subtypes get their own icon; anything else falls back by broad
+  // category (so e.g. a "Village office (Revenue Dept.)" — a real subtype we
+  // don't special-case — still gets the government pin, not the generic one).
+  const categoryFallback: maplibregl.ExpressionSpecification = [
+    "match", ["get", "category"],
+    "school", "pin-school",
+    "health", "pin-health",
+    "government", "pin-government",
+    "pin-public",
+  ];
   const placeIcon: maplibregl.ExpressionSpecification = [
     "match",
     ["get", "subtype"],
@@ -955,7 +1011,7 @@ function ensureAppLayers(map: maplibregl.Map) {
     "Health facility", "pin-health",
     "Local body office", "pin-government",
     "Government office", "pin-government",
-    "pin-public",
+    categoryFallback,
   ];
   add({
     id: "places-icon",
@@ -1058,6 +1114,34 @@ function ensureAppLayers(map: maplibregl.Map) {
       "circle-opacity": 0.22,
       "circle-stroke-color": "#f59e0b",
       "circle-stroke-width": 2.5,
+    },
+  });
+
+  /* ---- search pulse: a 3s "radar ping" so a search result is unmistakable ---- */
+  add({
+    id: "pulse-ring",
+    type: "circle",
+    source: "__pulse",
+    paint: {
+      "circle-radius": 8,
+      "circle-color": "#2563eb",
+      "circle-opacity": 0,
+      "circle-stroke-color": "#2563eb",
+      "circle-stroke-width": 2.5,
+      "circle-stroke-opacity": 0,
+    },
+  });
+  add({
+    id: "pulse-dot",
+    type: "circle",
+    source: "__pulse",
+    paint: {
+      "circle-radius": 5,
+      "circle-color": "#2563eb",
+      "circle-opacity": 0,
+      "circle-stroke-color": "#ffffff",
+      "circle-stroke-width": 1.5,
+      "circle-stroke-opacity": 0,
     },
   });
 

@@ -1,0 +1,43 @@
+{
+  "generated": "2026-09-11T10:02:02.270Z",
+  "added_places": [],
+  "skipped": [
+    {
+      "name": "Krishi Bhavan Tanur",
+      "reason": "no Nominatim hit"
+    },
+    {
+      "name": "Krishi Bhavan Ozhur",
+      "reason": "no Nominatim hit"
+    },
+    {
+      "name": "Krishi Bhavan Ponmundam",
+      "reason": "no Nominatim hit"
+    },
+    {
+      "name": "Primary Health Centre Ponmundam",
+      "reason": "no Nominatim hit",
+      "source": "https://www.mappls.com/place-primary+health+centre+ponmundam"
+    },
+    {
+      "name": "Primary Health Centre Cheriyamundam",
+      "reason": "no Nominatim hit",
+      "source": "arogyakeralam.gov.in sub-centre list"
+    },
+    {
+      "name": "Family Health Centre Tanalur",
+      "reason": "no Nominatim hit",
+      "source": "digitalkeralam.com widget 3376"
+    },
+    {
+      "name": "Primary Health Centre Niramaruthur",
+      "reason": "no Nominatim hit",
+      "source": "web search — Niramaruthur GP, Tanur Block"
+    },
+    {
+      "name": "Primary Health Centre Ozhur",
+      "reason": "no Nominatim hit",
+      "source": "web search — needs exact address confirmation"
+    }
+  ]
+}

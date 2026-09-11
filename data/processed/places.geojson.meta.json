@@ -2,12 +2,12 @@
   "dataset": "places",
   "features": 188,
   "by_category": {
-    "school": 95,
     "government": 44,
-    "health": 49
+    "health": 49,
+    "school": 95
   },
-  "status": "SEED — OSM only. Authoritative: KITE/Sametham (schools), DHS (health), LSGD (offices).",
-  "source": "OpenStreetMap via Overpass API",
+  "status": "Schools: 12 authoritative Sametham/KITE records (geocoded, verified:false pending field check) + 83 OSM seed points not yet cross-referenced. Health/government/public: OSM seed only, see DATA_QUALITY.md.",
+  "source": "Sametham (KITE) for schools; OpenStreetMap via Overpass API for the rest",
   "license": "ODbL 1.0",
-  "generated": "2026-09-09T09:28:00.869Z"
+  "generated": "2026-09-11T08:36:15.256Z"
 }

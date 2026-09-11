@@ -1,0 +1,11 @@
+{
+  "dataset": "schools_official",
+  "features": 12,
+  "official_total": 73,
+  "geocoded": 12,
+  "failed": 61,
+  "source": "Sametham (KITE) — Assembly Constituency = Tanur filter",
+  "source_url": "https://sametham.kite.kerala.gov.in/search/advanced_search_v2",
+  "position_method": "OSM Nominatim geocoding of the school's locality name, bounded to the constituency bbox",
+  "generated": "2026-09-11T08:36:15.245Z"
+}

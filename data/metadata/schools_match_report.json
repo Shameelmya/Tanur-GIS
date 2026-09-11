@@ -1,0 +1,519 @@
+{
+  "generated": "2026-09-11T08:36:15.246Z",
+  "method": "Nominatim locality geocoding (fuzzy OSM-name matching was tried first and discarded as unreliable — see git history of this file)",
+  "geocoded": [
+    {
+      "name": "S. M. M. H. S.S Rayirimangalam",
+      "code": "HS:19025",
+      "query": "rayirimangalam",
+      "nominatim": "Rayirimangalam West, Tanur, Tirur, Malappuram, Kerala, India",
+      "type": "local_authority"
+    },
+    {
+      "name": "A. M. L. P. S. Adrisseri",
+      "code": "LP:19601",
+      "query": "adrisseri",
+      "nominatim": "AM Lower Primary School Adrisseri, athrsseri road, Kavappura, Tirur, Malappuram, Kerala, 676106, India",
+      "type": "school"
+    },
+    {
+      "name": "Al Ameen E. M. L. P. S. Vailathur",
+      "code": "LP:19603",
+      "query": "al ameen vailathur",
+      "nominatim": "Al-Ameen English Medium School, Vailathur, Tirur - Malappuram - Manjeri Road, Samatha Nagar, Vailathur, Tirur, Malappuram, Kerala, 676106, India",
+      "type": "school"
+    },
+    {
+      "name": "A. M. L. P. S. Ayyaya",
+      "code": "LP:19606",
+      "query": "ayyaya",
+      "nominatim": "A M Lower Primary School Ayyaya, Ayyaya Juma Masjid Road, Ayyaya Road, Ozhur, Tirur, Malappuram, Kerala, 676313, India",
+      "type": "school"
+    },
+    {
+      "name": "A. M. L. P. S. Chilavil West",
+      "code": "LP:19614",
+      "query": "chilavil west",
+      "nominatim": "AM Lower Primary School, Chilavil West, Athanikkal - Theyyala Road, Ayyaya Road, Vailathur, Tirur, Malappuram, Kerala, 676106, India",
+      "type": "school"
+    },
+    {
+      "name": "A. M. L. P. S. Kormanthala",
+      "code": "LP:19636",
+      "query": "kormanthala",
+      "nominatim": "AM Lower Primary School Kormanthala, Tanur Poorappuzha Tippu Sulthan Road, Tanur, Tirur, Malappuram, Kerala, 676302, India",
+      "type": "school"
+    },
+    {
+      "name": "N. M. A. L. P. S. K.Puram",
+      "code": "LP:19643",
+      "query": "k puram",
+      "nominatim": "N M A Lower Primary School K Puram, Pattaruparambu Road, Tanalur, Tirur, Malappuram, Kerala, 676307, India",
+      "type": "school"
+    },
+    {
+      "name": "A. M. L. P. S. Tanalur",
+      "code": "LP:19655",
+      "query": "tanalur",
+      "nominatim": "AM Lower Primary School, Tanalur, Chemmad Road, Tanalur, Tirur, Malappuram, Kerala, 676307, India",
+      "type": "school"
+    },
+    {
+      "name": "A. M. U. P. S. Areekad",
+      "code": "UP:19666",
+      "query": "areekad",
+      "nominatim": "AM Upper Primary School, Areekad, areekad road, Ayyaya Road, Tanalur, Tirur, Malappuram, Kerala, 676103, India",
+      "type": "school"
+    },
+    {
+      "name": "K. P. N. M. U. P. S. Tanur",
+      "code": "UP:19686",
+      "query": "k tanur",
+      "nominatim": "K P N M Upper Primary School,Tanur, Chamravattam - Tirur - Kozhikkode Road, Tanur, Tirur, Malappuram, Kerala, 676302, India",
+      "type": "school"
+    },
+    {
+      "name": "Pleasant E M School Tanur",
+      "code": "HS:50060",
+      "query": "pleasant tanur",
+      "nominatim": "Pleasant School Tanur, Tanur - Theyyala Road, Tanur, Tirur, Malappuram, Kerala, 676302, India",
+      "type": "school"
+    },
+    {
+      "name": "ICH School Tanur",
+      "code": "HS:50061",
+      "query": "ich tanur",
+      "nominatim": "ICH School Tanur, Tippu Sulthan Road, Tanur, Tirur, Malappuram, Kerala, 676302, India",
+      "type": "school"
+    }
+  ],
+  "not_placed": [
+    {
+      "name": "G. H. S. S. Kattilangadi",
+      "code": "HS:19024",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "D. G. H. S. S. Tanur",
+      "code": "HS:19026",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "GOVT. REGIONAL FISHERIES TECHNICAL V H S S, THANUR",
+      "code": "HS:19027",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "C. P. P. H. M. H. S. Ozhur",
+      "code": "HS:19029",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. H. S. S. Cheriyamundam",
+      "code": "HS:19067",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. H. S. S. Niramaruthur",
+      "code": "HS:19079",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "M. T. I. H. S. Thalakkadathur",
+      "code": "HS:19085",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Unaided Recognised",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "H. S. M. E. M. M. H. S. S. Tanur",
+      "code": "HS:19101",
+      "local_body_raw": "Tanur(M)",
+      "management": "Unaided Recognised",
+      "reason": "Nominatim only matched the town/station, not a school (type=station)"
+    },
+    {
+      "name": "G. H. S. S. Ponmundam",
+      "code": "HS:19119",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "Crescent English School, Tanalur",
+      "code": "HS:19131",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Unaided Recognised",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Edakadappuram",
+      "code": "LP:19607",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Cheerankadappuram",
+      "code": "LP:19608",
+      "local_body_raw": "Tanur(M)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Iringavoor",
+      "code": "LP:19609",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Cheriyamundam",
+      "code": "LP:19610",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "rejected: level mismatch (LP School vs \"Government Higher Secondary School, Cheriyamundam, meeshappadi road, Vailathur, Tirur, Malappuram, Kerala, 676103, India\")"
+    },
+    {
+      "name": "A. M. L. P. S. Chilavil",
+      "code": "LP:19615",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "rejected: same point already matched to \"A. M. L. P. S. Chilavil West\" with a different qualifier"
+    },
+    {
+      "name": "G. M. L. P. S. Korad",
+      "code": "LP:19616",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Eranellur",
+      "code": "LP:19618",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Manalipuzha",
+      "code": "LP:19619",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Iringavoor North",
+      "code": "LP:19620",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Ittilakkal",
+      "code": "LP:19621",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Panangattur",
+      "code": "LP:19624",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Parapputhadam",
+      "code": "LP:19626",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. L. P. S. Rayirimangalam",
+      "code": "LP:19629",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Ponmundam South",
+      "code": "LP:19631",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Puthiyakadppuram North",
+      "code": "LP:19633",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Korangath",
+      "code": "LP:19634",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. L. P. S. Rayirimangalam East",
+      "code": "LP:19635",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Rayirimangalam",
+      "code": "LP:19637",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Tanur North",
+      "code": "LP:19640",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. L. P. S. Thalakadathur",
+      "code": "LP:19642",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Omachapuzha",
+      "code": "LP:19645",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Pakara",
+      "code": "LP:19647",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Patham pad",
+      "code": "LP:19649",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Ponmundam North",
+      "code": "LP:19650",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. L. P. S. Puthentheru",
+      "code": "LP:19651",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. L. P. S. Puthu kulangara",
+      "code": "LP:19652",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Thalakkadathur North",
+      "code": "LP:19653",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Thalakkottur",
+      "code": "LP:19654",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. L. P. S. Vallikanhiram",
+      "code": "LP:19657",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. L. P. S. K.Puram",
+      "code": "LP:19660",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. L. P. S. Ozhur",
+      "code": "LP:19662",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. L. P. S. Pariyapuram",
+      "code": "LP:19663",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. L. P. S. Tanur",
+      "code": "LP:19664",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "geocoded outside constituency"
+    },
+    {
+      "name": "G. U. P. S. Karingappara",
+      "code": "UP:19667",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "S. V. A. U. P. S. Iringavur",
+      "code": "UP:19670",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G H S Meenadathur",
+      "code": "HS:19671",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. U. P. S. Tanur Town",
+      "code": "UP:19673",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. U. P. S. Pariyapuram Central",
+      "code": "UP:19676",
+      "local_body_raw": "Tanur(M)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. U. P. S. GNANAPRABHA",
+      "code": "UP:19677",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. U. P. S. Vaniyannur",
+      "code": "UP:19678",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. M. U. P. S. Cheerankadappuram",
+      "code": "UP:19679",
+      "local_body_raw": "Tanur(M)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "Al Noor High School Panangattur",
+      "code": "HS:19680",
+      "local_body_raw": "Tanur(M)",
+      "management": "Unaided Recognised",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "A. M. U. P. S. Ayyaya",
+      "code": "UP:19681",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "rejected: level mismatch (UP School vs \"A M Lower Primary School Ayyaya, Ayyaya Juma Masjid Road, Ayyaya Road, Ozhur, Tirur, Malappuram, Kerala, 676313, India\")"
+    },
+    {
+      "name": "P. M. S. A. M. U. P. S. Cherumukku",
+      "code": "UP:19682",
+      "local_body_raw": "Tirurangadi Malappuram(P)",
+      "management": "Aided",
+      "reason": "geocoded outside constituency"
+    },
+    {
+      "name": "S. M. U. P. S. Tanur",
+      "code": "UP:19685",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Aided",
+      "reason": "Nominatim only matched the town/station, not a school (type=station)"
+    },
+    {
+      "name": "I. U. P. S. Tanalur",
+      "code": "UP:19687",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Unaided Recognised",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "Makhdoomiya Islamic English School Kavappara",
+      "code": "LP:19692",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Unaided Recognised",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "Sunni Centre English School Attanikkal",
+      "code": "LP:19693",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Unaided Recognised",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "Saraswathy Vidya Nikethan Kalad",
+      "code": "LP:19694",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Unaided Recognised",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "G. U. P. S Niramaruthur",
+      "code": "UP:19699",
+      "local_body_raw": "Tanur Malappuram(P)",
+      "management": "Government",
+      "reason": "no Nominatim hit within the constituency"
+    },
+    {
+      "name": "Nice Public School Tanur",
+      "code": "LP:50064",
+      "local_body_raw": "Tanur(M)",
+      "management": "Unaided Recognised",
+      "reason": "no Nominatim hit within the constituency"
+    }
+  ]
+}

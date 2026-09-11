@@ -69,26 +69,55 @@ Raw downloads land in `data/raw/` (git-ignored). Cleaned outputs are in
 | **Licence** | ODbL 1.0 |
 | **Confidence** | **High** (trunk line is well mapped) |
 
-## 6. Bridges — `public/data/bridges.geojson` — ⚠ SEED ONLY
+## 6. Bridges — `public/data/bridges.geojson` — ⚠ MOSTLY SEED
 
 | | |
 |---|---|
-| **Source** | OpenStreetMap (Overpass): road ways tagged `bridge=*` and `man_made=bridge` — `data/scripts/06-bridges-seed.mjs` |
-| **Coverage** | 37 seed points; 5 carry a name |
-| **Licence** | ODbL 1.0 |
+| **Source** | OpenStreetMap (Overpass): road ways tagged `bridge=*` and `man_made=bridge` — `data/scripts/06-bridges-seed.mjs`. Plus two researched additions (§6a). |
+| **Coverage** | 38 points; 7 carry a name |
+| **Licence** | ODbL 1.0 for the OSM points |
 | **Status** | **Deliberately incomplete.** No open, authoritative Kerala bridge inventory exists (Kerala PWD Bridge wing / KRFB data is not public). Administrators complete this layer with **+ Add Bridge**. |
-| **Confidence** | Low for completeness; positions are the OSM bridge-way midpoints |
+| **Confidence** | Low for completeness; OSM positions are bridge-way midpoints |
 | **To improve** | Request the constituency bridge list from the PWD (Roads) Division, Tirur / the PWD GIS cell |
 
-## 7. Important places — `public/data/places.geojson` — SEED
+### 6a. Two researched named bridges — `data/scripts/10-local-research.mjs`
+
+| Bridge | Source | Confidence |
+|---|---|---|
+| **Tanur–Theyyala Road ROB** (railway over-bridge) | [Malappuram district (NIC) official ROB declaration, 03/01/2020](https://malappuram.nic.in/en/document/tanur-town-theyyala-rob-declaration/); [Tanur Municipality progress video, Oct 2023](https://www.facebook.com/TanurMalappuram/videos/tanur-theyyala-road-railway-over-bridge-rob-work-in-progress-30-10-23/7005682076163329/) | Name/existence: high. Position: **inferred** — attached to the nearest existing unnamed OSM bridge point (beside Tanur station); the declaration document itself carries no coordinates. |
+| **Thooval Theeram Floating Bridge** (Ottumpuram beach) | [Onmanorama, 25 Apr 2023](https://www.onmanorama.com/travel/kerala/2023/04/25/malappuram-ottumpuram-thooval-theeram-beach-floating-bridge.html); [DT Next, 24 Apr 2023](https://www.dtnext.in/videos/2023/04/24/floating-bridge-inaugurated-at-tanur); position from [OSM node 4570963189](https://www.openstreetmap.org/node/4570963189) | High — a real, newsworthy ~100 m pedestrian floating bridge, inaugurated 23 Apr 2023. Not a road bridge. |
+
+## 7. Important places — `public/data/places.geojson` — MIXED (OSM seed + official records)
 
 | | |
 |---|---|
-| **Source** | OpenStreetMap (Overpass): `amenity=school|college|hospital|clinic|doctors`, `healthcare=*`, `amenity=townhall|police|post_office|courthouse|fire_station`, `office=government` — `data/scripts/07-pois-seed.mjs` |
-| **Coverage** | 188 named places (95 schools, 49 health, 44 government) inside the constituency |
-| **Licence** | ODbL 1.0 |
-| **Authoritative sources to verify against** | Schools → **Sametham / KITE** (`sametham.kite.kerala.gov.in`, filter *Assembly Constituency = Tanur*); Health → **DHS / Arogya Keralam** institution lists; Offices → **LSGD directory** |
-| **Confidence** | Names/type **Medium-High**; exact coordinates **Medium**; all records `verified: false` until an administrator checks them |
+| **OSM seed** | `amenity=school|college|hospital|clinic|doctors`, `healthcare=*`, `amenity=townhall|police|post_office|courthouse|fire_station`, `office=government` — `data/scripts/07-pois-seed.mjs` (→ `places_osm_seed.geojson`, 188 features) |
+| **Coverage** | 196 places total inside the constituency |
+| **Licence** | ODbL 1.0 for OSM-sourced records |
+
+### 7a. Schools — official (73 of 196 places) — `data/scripts/09-schools-official.mjs`
+
+| | |
+|---|---|
+| **Source** | **Sametham — Kerala School Data Bank, KITE**, Government of Kerala. Advanced Search, filtered `Assembly Constituency = Tanur`. |
+| **URL** | https://sametham.kite.kerala.gov.in/search/advanced_search_v2 |
+| **Acquired** | 2026-09-11. Portal's own "data updated" date: 27 Jun 2026. |
+| **Coverage** | **All 73 schools** in the constituency — school code, name, local body, management (30 Government / 31 Aided / 12 Unaided-Recognised), class range, student count, phone. Raw capture: `data/raw/sametham_tanur_schools_raw.txt`. |
+| **Position** | Sametham publishes no coordinates. **12 of the 73** were placed by geocoding the school's locality name via OSM Nominatim, bounded to the constituency and checked for LP/UP/HS level consistency (an earlier attempt to fuzzy-match official names directly against OSM school points produced wrong pairings — e.g. an aided LP school matched to an unrelated Government Higher Secondary School in the same locality — and was discarded; see the "level mismatch" rejections logged in `data/metadata/schools_match_report.json`). **61 remain un-mapped** rather than guessed. |
+| **Licence** | Official Government of Kerala public data (identity/attributes); OSM Nominatim ODbL 1.0 (position) |
+| **Confidence** | Identity/attributes: **high** (authoritative). Position: **medium** for the 12 placed (locality-level, not the surveyed building), **none** for the other 61. |
+
+### 7b. Government offices & health facilities — researched (7 of 196 places) — `data/scripts/10-local-research.mjs`
+
+| | |
+|---|---|
+| **Village offices (6, all placed)** | Kerala Revenue Department official portal, one page per office, including the site's own embedded map pin — https://landrevenue.kerala.gov.in/core/Office_websites/ (`contactus.php` + `locateus.php`, per-office `nm=` codes). Name, address, phone, email, ward, establishment date, and coordinate all from this official source. |
+| **Tanur Police Station** | https://ps.keralapolice.gov.in/tanur-ps/contacts — official address, geocoded to it. |
+| **Tanur CHC** | Digitalkeralam / Quickerala listings for address + phone; geocoded to its own published road, "Hospital Road, Tanur". |
+| **Not placed this pass** | Krishi Bhavan Tanur/Ozhur/Ponmundam (phone + email confirmed via `keralaagriculture.gov.in`, but not geocodable); PHC Ponmundam, PHC Cheriyamundam, PHC Ozhur, PHC Niramaruthur, FHC Tanalur (names/partial addresses confirmed, not geocodable). Real, named, documented in `data/raw/offices_health_research_notes.json` — awaiting an administrator to place them via **+ Add Place**. |
+| **Confidence** | Village offices: **high**. Police/CHC: **medium** (official address, geocoded). Un-placed records: identity high, position none (by design). |
+
+**Authoritative sources still to verify the OSM-seed remainder against:** Health → **DHS / Arogya Keralam** institution lists; Offices → **LSGD directory**.
 
 ## 8. Water bodies — `public/data/water.geojson`
 
