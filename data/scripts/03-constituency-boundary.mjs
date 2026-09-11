@@ -61,10 +61,14 @@ writeJSON(join(PROCESSED, "constituency.geojson"), fc([feature]));
 const outerRing = [
   [-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85],
 ];
+// Hole rings must wind opposite to the outer ring (GeoJSON RFC7946) or
+// renderers treat them as solid fill instead of a punched-out hole. The
+// constituency exterior ring comes out CCW like the mask's outer ring, so
+// reverse it here.
 const holes =
   geometry.type === "MultiPolygon"
-    ? geometry.coordinates.map((poly) => poly[0])
-    : [geometry.coordinates[0]];
+    ? geometry.coordinates.map((poly) => [...poly[0]].reverse())
+    : [[...geometry.coordinates[0]].reverse()];
 writeJSON(
   join(PROCESSED, "constituency_mask.geojson"),
   fc([

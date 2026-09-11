@@ -17,12 +17,16 @@ const SEARCHABLE: LayerId[] = ["roads", "bridges", "places", "wards", "local_bod
 export function SearchBar({
   collections,
   onPick,
+  autoFocus,
+  placeholder,
 }: {
   collections: Record<LayerId, FeatureCollection>;
   onPick: (s: Selection) => void;
+  autoFocus?: boolean;
+  placeholder?: string;
 }) {
   const [q, setQ] = useState("");
-  const [focus, setFocus] = useState(false);
+  const [focus, setFocus] = useState(Boolean(autoFocus));
   const [active, setActive] = useState(0);
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -88,6 +92,7 @@ export function SearchBar({
         </svg>
         <input
           value={q}
+          autoFocus={autoFocus}
           onChange={(e) => {
             setQ(e.target.value);
             setActive(0);
@@ -100,7 +105,7 @@ export function SearchBar({
             if (e.key === "Enter" && results[active]) choose(results[active]);
             if (e.key === "Escape") setFocus(false);
           }}
-          placeholder="Search roads, wards, schools, bridges…"
+          placeholder={placeholder ?? "Search roads, wards, schools, bridges…"}
           className="w-full bg-transparent text-sm outline-none placeholder:text-ink-faint"
         />
       </div>

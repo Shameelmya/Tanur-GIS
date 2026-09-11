@@ -13,10 +13,10 @@ import type { FeatureCollection, Geometry } from "geojson";
 import {
   LAYERS,
   ROAD_STYLE,
-  PLACE_CATEGORIES,
   LOCAL_BODY_COLORS,
   SELECTED_ROAD_COLOR,
 } from "@/lib/layers";
+import { registerIcons } from "@/lib/mapIcons";
 import type { LayerId, GeoFeature, Selection } from "@/lib/types";
 
 const BASEMAP =
@@ -97,6 +97,22 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   const [basemap, setBasemap] = useState<"plain" | "streets">("plain");
   const [basemapBusy, setBasemapBusy] = useState(false);
 
+  // Hold-to-open-directions (press and hold a place or bridge for 3s).
+  // Driven by setTimeout/setInterval rather than requestAnimationFrame: rAF is
+  // throttled to a no-op on a backgrounded/unfocused tab, which would silently
+  // break the gesture; real timers keep firing.
+  const HOLD_MS = 3000;
+  const longPressRef = useRef<{
+    timeoutId: ReturnType<typeof setTimeout>;
+    intervalId: ReturnType<typeof setInterval>;
+    startedAt: number;
+    startX: number;
+    startY: number;
+    sel: Selection;
+  } | null>(null);
+  const suppressNextClickRef = useRef(false);
+  const [holdUI, setHoldUI] = useState<{ x: number; y: number; progress: number; name: string } | null>(null);
+
   drawRef.current = draw;
   collectionsRef.current = collections;
   selectedRef.current = selected;
@@ -133,7 +149,18 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
     };
 
     let didFit = false;
-    const ro = new ResizeObserver(() => {
+    let lastW = 0;
+    let lastH = 0;
+    const ro = new ResizeObserver((entries) => {
+      const box = entries[0]?.contentRect;
+      // Only act on a genuine size change — resize()/triggerRepaint() move the
+      // camera slightly (firing movestart), so a no-op loop here would spam
+      // move events and interfere with things like the press-and-hold gesture.
+      if (box && Math.round(box.width) === lastW && Math.round(box.height) === lastH) return;
+      if (box) {
+        lastW = Math.round(box.width);
+        lastH = Math.round(box.height);
+      }
       map.resize();
       if (!didFit && containerRef.current && containerRef.current.clientWidth > 100) {
         didFit = true;
@@ -368,6 +395,10 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   /* --------------------------- interactions -------------------------- */
   function wireInteractions(map: maplibregl.Map) {
     map.on("click", (e) => {
+      if (suppressNextClickRef.current) {
+        suppressNextClickRef.current = false;
+        return;
+      }
       const d = drawRef.current;
       if (d) {
         const c: [number, number] = [e.lngLat.lng, e.lngLat.lat];
@@ -390,12 +421,12 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
     });
 
     const hoverLayers = [
-      "places-circle",
-      "bridges-circle",
+      "places-icon",
+      "bridges-icon",
       "roads-hit",
       "wards-fill",
       "local_bodies-fill",
-      "railway-station",
+      "railway-icon",
     ];
     for (const id of hoverLayers) {
       map.on("mouseenter", id, () => {
@@ -405,6 +436,89 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
         if (!drawRef.current) map.getCanvas().style.cursor = "";
       });
     }
+
+    wireLongPress(map);
+  }
+
+  /* ---------------- hold 3s on a place/bridge → Google Maps directions --- */
+  function wireLongPress(map: maplibregl.Map) {
+    const el = map.getCanvasContainer();
+
+    const clearLongPress = () => {
+      if (longPressRef.current) {
+        clearTimeout(longPressRef.current.timeoutId);
+        clearInterval(longPressRef.current.intervalId);
+      }
+      longPressRef.current = null;
+      setHoldUI(null);
+    };
+
+    const complete = () => {
+      const lp = longPressRef.current;
+      clearLongPress();
+      if (!lp) return;
+      const geom = lp.sel.feature.geometry;
+      if (geom.type !== "Point") return;
+      const [lng, lat] = geom.coordinates as [number, number];
+      suppressNextClickRef.current = true;
+      window.open(
+        `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    };
+
+    const pointFromClient = (clientX: number, clientY: number) => {
+      const rect = el.getBoundingClientRect();
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    };
+
+    const begin = (clientX: number, clientY: number) => {
+      if (drawRef.current || longPressRef.current) return;
+      const { x, y } = pointFromClient(clientX, clientY);
+      const hit = pickFeature(map, [x, y]);
+      if (!hit || (hit.layer !== "places" && hit.layer !== "bridges")) return;
+      const startedAt = performance.now();
+      const name = String(hit.feature.properties.name || "this location");
+      setHoldUI({ x, y, progress: 0, name });
+      const intervalId = setInterval(() => {
+        const progress = Math.min(1, (performance.now() - startedAt) / HOLD_MS);
+        setHoldUI({ x, y, progress, name });
+      }, 60);
+      const timeoutId = setTimeout(complete, HOLD_MS);
+      longPressRef.current = { timeoutId, intervalId, startedAt, startX: x, startY: y, sel: hit };
+    };
+
+    const moveThreshold = (clientX: number, clientY: number) => {
+      const lp = longPressRef.current;
+      if (!lp) return;
+      const { x, y } = pointFromClient(clientX, clientY);
+      if (Math.hypot(x - lp.startX, y - lp.startY) > 9) clearLongPress();
+    };
+
+    el.addEventListener("mousedown", (e) => {
+      if (e.button !== 0) return;
+      begin(e.clientX, e.clientY);
+    });
+    el.addEventListener("touchstart", (e) => {
+      const t = e.touches[0];
+      if (t) begin(t.clientX, t.clientY);
+    }, { passive: true });
+
+    el.addEventListener("mousemove", (e) => moveThreshold(e.clientX, e.clientY));
+    el.addEventListener("touchmove", (e) => {
+      const t = e.touches[0];
+      if (t) moveThreshold(t.clientX, t.clientY);
+    }, { passive: true });
+
+    el.addEventListener("mouseup", clearLongPress);
+    el.addEventListener("mouseleave", clearLongPress);
+    el.addEventListener("touchend", clearLongPress);
+    el.addEventListener("touchcancel", clearLongPress);
+    // Only a genuine user-initiated drag should cancel the hold — 'movestart'/
+    // 'zoomstart' also fire from our own programmatic resize()/redraw() kicks
+    // (see the render-loop kick above) and would cancel every hold instantly.
+    map.on("dragstart", clearLongPress);
   }
 
   function pickFeature(map: maplibregl.Map, pt: maplibregl.PointLike): Selection | null {
@@ -476,6 +590,32 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
           {draw.layer === "bridges" ? "bridge" : "location"}
         </div>
       )}
+
+      {holdUI && (
+        <div
+          className="pointer-events-none absolute z-20"
+          style={{ left: holdUI.x - 27, top: holdUI.y - 27 }}
+        >
+          <svg width="54" height="54" viewBox="0 0 54 54">
+            <circle cx="27" cy="27" r="23" fill="rgba(15,23,42,0.58)" />
+            <circle
+              cx="27" cy="27" r="21" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="3.5"
+            />
+            <circle
+              cx="27" cy="27" r="21" fill="none" stroke="#12B76A" strokeWidth="3.5" strokeLinecap="round"
+              strokeDasharray={`${holdUI.progress * 131.9} 131.9`}
+              transform="rotate(-90 27 27)"
+            />
+            <path
+              d="M27 17v14M20 24l7-7 7 7M20 37h14"
+              fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+            />
+          </svg>
+          <div className="mt-1 max-w-[9rem] truncate rounded-full bg-ink/85 px-2 py-0.5 text-center text-[10px] font-medium text-white">
+            Hold for directions…
+          </div>
+        </div>
+      )}
     </div>
   );
 });
@@ -504,11 +644,11 @@ function styleLayerIds(id: LayerId): string[] {
     case "roads":
       return ["roads-casing", "roads-line", "roads-selected", "roads-hit", "roads-label"];
     case "railway":
-      return ["railway-line", "railway-dash", "railway-station", "railway-label"];
+      return ["railway-line", "railway-dash", "railway-icon", "railway-label"];
     case "bridges":
-      return ["bridges-halo", "bridges-circle", "bridges-label"];
+      return ["bridges-icon", "bridges-label"];
     case "places":
-      return ["places-circle", "places-label"];
+      return ["places-icon", "places-label"];
     default:
       return [];
   }
@@ -531,18 +671,19 @@ function ensureAppLayers(map: maplibregl.Map) {
   gj("constituency_mask");
   gj("__highlight");
   gj("__draw");
+  registerIcons(map);
 
   const add = (layer: maplibregl.LayerSpecification, before?: string) => {
     if (!map.getLayer(layer.id))
       map.addLayer(layer, before && map.getLayer(before) ? before : undefined);
   };
 
-  /* ---- mask: grey-out everything outside the constituency ---- */
+  /* ---- mask: fade everything outside the constituency to greyscale ---- */
   add({
     id: "mask-outside",
     type: "fill",
     source: "constituency_mask",
-    paint: { "fill-color": "#aeb8c2", "fill-opacity": 0.55 },
+    paint: { "fill-color": "#9AA5B1", "fill-opacity": 0.68 },
   });
 
   /* ---- water ---- */
@@ -742,15 +883,16 @@ function ensureAppLayers(map: maplibregl.Map) {
     paint: { "line-color": "#ffffff", "line-width": 1.4, "line-dasharray": [3, 3] },
   });
   add({
-    id: "railway-station",
-    type: "circle",
+    id: "railway-icon",
+    type: "symbol",
     source: "railway",
     filter: ["==", ["geometry-type"], "Point"],
-    paint: {
-      "circle-radius": 5,
-      "circle-color": "#334155",
-      "circle-stroke-color": "#fff",
-      "circle-stroke-width": 2.5,
+    layout: {
+      "icon-image": "pin-railway",
+      "icon-size": ["interpolate", ["linear"], ["zoom"], 10, 0.32, 14, 0.48, 17, 0.62],
+      "icon-anchor": "bottom",
+      "icon-allow-overlap": true,
+      "icon-ignore-placement": true,
     },
   });
   add({
@@ -761,35 +903,25 @@ function ensureAppLayers(map: maplibregl.Map) {
     layout: {
       "text-field": ["get", "name"],
       "text-size": 11,
-      "text-offset": [0, 1.3],
+      "text-offset": [0, 0.4],
       "text-anchor": "top",
       "text-font": ["Noto Sans Bold", "Open Sans Bold"],
     },
     paint: { "text-color": "#334155", "text-halo-color": "#ffffff", "text-halo-width": 1.8 },
   });
 
-  /* ---- bridges ---- */
+  /* ---- bridges — pin icon, not a plain dot ---- */
   add({
-    id: "bridges-halo",
-    type: "circle",
+    id: "bridges-icon",
+    type: "symbol",
     source: "bridges",
     minzoom: 10,
-    paint: {
-      "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 6, 16, 13],
-      "circle-color": "#e11d48",
-      "circle-opacity": 0.14,
-    },
-  });
-  add({
-    id: "bridges-circle",
-    type: "circle",
-    source: "bridges",
-    minzoom: 10,
-    paint: {
-      "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 3.6, 16, 7],
-      "circle-color": "#e11d48",
-      "circle-stroke-color": "#ffffff",
-      "circle-stroke-width": 2,
+    layout: {
+      "icon-image": "pin-bridge",
+      "icon-size": ["interpolate", ["linear"], ["zoom"], 10, 0.24, 13, 0.36, 16, 0.55, 18, 0.66],
+      "icon-anchor": "bottom",
+      "icon-allow-overlap": true,
+      "icon-ignore-placement": true,
     },
   });
   add({
@@ -801,33 +933,41 @@ function ensureAppLayers(map: maplibregl.Map) {
     layout: {
       "text-field": ["get", "name"],
       "text-size": 10,
-      "text-offset": [0, 1.2],
+      "text-offset": [0, 0.3],
       "text-anchor": "top",
       "text-font": ["Noto Sans Regular", "Open Sans Regular"],
     },
-    paint: { "text-color": "#9f1239", "text-halo-color": "#ffffff", "text-halo-width": 1.5 },
+    paint: { "text-color": "#9a3412", "text-halo-color": "#ffffff", "text-halo-width": 1.5 },
   });
 
-  /* ---- places ---- */
-  const placeColor: maplibregl.ExpressionSpecification = [
+  /* ---- places — Google-Maps-style pin per category/subtype ---- */
+  const placeIcon: maplibregl.ExpressionSpecification = [
     "match",
-    ["get", "category"],
-    "school", PLACE_CATEGORIES.school.color,
-    "health", PLACE_CATEGORIES.health.color,
-    "government", PLACE_CATEGORIES.government.color,
-    "public", PLACE_CATEGORIES.public.color,
-    "#64748b",
+    ["get", "subtype"],
+    "Police station", "pin-police",
+    "Post office", "pin-post",
+    "Court", "pin-court",
+    "Fire station", "pin-fire",
+    "School", "pin-school",
+    "College", "pin-school",
+    "Hospital", "pin-health",
+    "Clinic / PHC", "pin-health",
+    "Health facility", "pin-health",
+    "Local body office", "pin-government",
+    "Government office", "pin-government",
+    "pin-public",
   ];
   add({
-    id: "places-circle",
-    type: "circle",
+    id: "places-icon",
+    type: "symbol",
     source: "places",
-    minzoom: 11,
-    paint: {
-      "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 3, 16, 6.5],
-      "circle-color": placeColor,
-      "circle-stroke-color": "#ffffff",
-      "circle-stroke-width": 1.8,
+    minzoom: 10,
+    layout: {
+      "icon-image": placeIcon,
+      "icon-size": ["interpolate", ["linear"], ["zoom"], 10, 0.24, 13, 0.36, 16, 0.55, 18, 0.66],
+      "icon-anchor": "bottom",
+      "icon-allow-overlap": true,
+      "icon-ignore-placement": true,
     },
   });
   add({
@@ -838,7 +978,7 @@ function ensureAppLayers(map: maplibregl.Map) {
     layout: {
       "text-field": ["get", "name"],
       "text-size": 10,
-      "text-offset": [0, 1],
+      "text-offset": [0, 0.35],
       "text-anchor": "top",
       "text-font": ["Noto Sans Regular", "Open Sans Regular"],
       "text-max-width": 9,
@@ -883,7 +1023,7 @@ function ensureAppLayers(map: maplibregl.Map) {
     type: "line",
     source: "constituency",
     layout: { "line-cap": "round", "line-join": "round" },
-    paint: { "line-color": "#0f766e", "line-width": 3, "line-opacity": 0.95 },
+    paint: { "line-color": "#0EA5A0", "line-width": 3.2, "line-opacity": 0.95 },
   });
 
   /* ---- selection overlay (polygons / points) ---- */
@@ -926,7 +1066,7 @@ function ensureAppLayers(map: maplibregl.Map) {
     id: "draw-line",
     type: "line",
     source: "__draw",
-    paint: { "line-color": "#0f766e", "line-width": 2.5, "line-dasharray": [2, 1] },
+    paint: { "line-color": "#0EA5A0", "line-width": 2.5, "line-dasharray": [2, 1] },
   });
   add({
     id: "draw-point",
@@ -935,7 +1075,7 @@ function ensureAppLayers(map: maplibregl.Map) {
     filter: ["==", ["geometry-type"], "Point"],
     paint: {
       "circle-radius": 4,
-      "circle-color": "#0f766e",
+      "circle-color": "#0EA5A0",
       "circle-stroke-color": "#fff",
       "circle-stroke-width": 2,
     },
@@ -955,10 +1095,11 @@ function fitToConstituency(map: maplibregl.Map) {
 }
 
 function expandPoint(pt: maplibregl.PointLike): [maplibregl.PointLike, maplibregl.PointLike] {
-  const p = pt as { x: number; y: number };
+  // Accepts either a MapLibre Point ({x,y}) or a plain [x,y] tuple.
+  const [x, y] = Array.isArray(pt) ? pt : [(pt as { x: number }).x, (pt as { y: number }).y];
   return [
-    [p.x - 7, p.y - 7],
-    [p.x + 7, p.y + 7],
+    [x - 8, y - 8],
+    [x + 8, y + 8],
   ];
 }
 

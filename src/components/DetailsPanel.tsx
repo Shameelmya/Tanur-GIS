@@ -107,7 +107,10 @@ export function DetailsPanel({
 }) {
   const { user, isAdmin } = useAuth();
   const { layer, feature } = selection;
-  const props = feature.properties;
+  // Locally overlay a just-saved patch so the panel reflects it immediately,
+  // without waiting for the parent's selection object to be re-derived.
+  const [overrides, setOverrides] = useState<Record<string, unknown>>({});
+  const props = { ...feature.properties, ...overrides };
   const fields = FIELDS[layer] ?? [];
   const isEditable = EDITABLE_LAYERS.includes(layer as EditableLayer);
   const canEdit = isAdmin && isEditable;
@@ -124,9 +127,12 @@ export function DetailsPanel({
     setEditing(false);
     setShowAudit(false);
     setAudit(null);
+    setOverrides({});
     setForm(
       Object.fromEntries(
-        fields.filter((f) => f.editable).map((f) => [f.key, String(props[f.key] ?? "")])
+        fields
+          .filter((f) => f.editable)
+          .map((f) => [f.key, String(feature.properties[f.key] ?? "")])
       )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -168,6 +174,7 @@ export function DetailsPanel({
         user,
       });
       onSaved(layer as EditableLayer, { ...rec, ...patch });
+      setOverrides((o) => ({ ...o, ...patch }));
       setEditing(false);
     } finally {
       setBusy(false);
@@ -199,7 +206,7 @@ export function DetailsPanel({
   }
 
   return (
-    <aside className="absolute inset-x-0 bottom-0 z-30 flex max-h-[70vh] flex-col rounded-t-2xl border-t border-line bg-white shadow-panel animate-fade-in md:static md:inset-auto md:max-h-none md:w-96 md:shrink-0 md:rounded-none md:border-l md:border-t-0">
+    <aside className="absolute inset-x-0 bottom-0 z-30 flex max-h-[75vh] flex-col rounded-t-2xl border-t border-line bg-white shadow-panel animate-fade-in md:static md:inset-auto md:max-h-none md:w-80 md:shrink-0 md:rounded-none md:border-l md:border-t-0 lg:w-96">
       <div className="flex items-start justify-between gap-2 border-b border-line px-4 py-3">
         <div className="min-w-0">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">

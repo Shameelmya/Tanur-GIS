@@ -6,7 +6,6 @@ import MapView, { type MapHandle, type DrawState } from "@/components/MapView";
 import { Header } from "@/components/Header";
 import { LayerPanel } from "@/components/LayerPanel";
 import { Legend } from "@/components/Legend";
-import { SearchBar } from "@/components/SearchBar";
 import { DetailsPanel } from "@/components/DetailsPanel";
 import { AdminToolbar } from "@/components/AdminToolbar";
 import { NewFeatureDialog } from "@/components/NewFeatureDialog";
@@ -80,35 +79,49 @@ export default function HomePage() {
     <div className="flex h-full flex-col bg-surface-muted">
       <Header
         constituency={gis.collections.constituency?.features?.[0]?.properties as Record<string, unknown> | undefined}
-      >
-        <SearchBar collections={gis.collections} onPick={flyTo} />
-      </Header>
+        collections={gis.collections}
+        onPick={flyTo}
+      />
 
       <div className="relative flex min-h-0 flex-1">
         {/* Left rail */}
         <aside
           className={`${
             mobilePanel === "layers" ? "flex" : "hidden"
-          } absolute inset-0 z-20 flex-col gap-3 overflow-y-auto bg-surface-muted p-3 md:static md:z-0 md:flex md:w-72 md:shrink-0 md:border-r md:border-line panel-scroll`}
+          } absolute inset-0 z-20 min-h-0 flex-col bg-surface-muted md:static md:z-0 md:flex md:w-64 md:shrink-0 md:border-r md:border-line lg:w-72`}
         >
-          <LayerPanel
-            visibility={visibility}
-            onToggle={toggleLayer}
-            manifestLayers={gis.collections}
-            zoom={zoom}
-            localBodyBorderOnly={localBodyBorderOnly}
-            onToggleBorderOnly={() => setLocalBodyBorderOnly((v) => !v)}
-          />
-          <Legend />
-          {isAdmin && (
-            <AdminToolbar
-              activeDraw={draw}
-              onStartDraw={startDraw}
-              onFinishLine={() => mapRef.current?.finishDrawing()}
-              onUndoVertex={() => mapRef.current?.undoVertex()}
-              onCancel={() => setDraw(null)}
+          <div className="flex shrink-0 items-center justify-between border-b border-line bg-white px-3 py-2.5 shadow-sm md:hidden">
+            <span className="text-sm font-semibold text-ink">Layers &amp; legend</span>
+            <button
+              onClick={() => setMobilePanel("map")}
+              className="rounded-full p-1.5 text-ink-soft hover:bg-surface-sunken"
+              aria-label="Close and return to map"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path d="m6 6 12 12M18 6 6 18" />
+              </svg>
+            </button>
+          </div>
+          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 panel-scroll">
+            <LayerPanel
+              visibility={visibility}
+              onToggle={toggleLayer}
+              manifestLayers={gis.collections}
+              zoom={zoom}
+              localBodyBorderOnly={localBodyBorderOnly}
+              onToggleBorderOnly={() => setLocalBodyBorderOnly((v) => !v)}
             />
-          )}
+            <Legend />
+            {isAdmin && (
+              <AdminToolbar
+                activeDraw={draw}
+                onStartDraw={startDraw}
+                onFinishLine={() => mapRef.current?.finishDrawing()}
+                onUndoVertex={() => mapRef.current?.undoVertex()}
+                onCancel={() => setDraw(null)}
+              />
+            )}
+          </div>
         </aside>
 
         {/* Map */}
@@ -140,13 +153,19 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setMobilePanel((p) => (p === "map" ? "layers" : "map"))}
-            className="absolute bottom-4 left-4 z-10 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium shadow-panel md:hidden"
-          >
-            {mobilePanel === "map" ? "Layers & legend" : "Back to map"}
-          </button>
+          {/* Mobile toggle — only rendered while the map is showing; the sidebar
+              has its own close button when open (see aside above). */}
+          {mobilePanel === "map" && (
+            <button
+              onClick={() => setMobilePanel("layers")}
+              className="absolute bottom-4 left-4 z-10 flex items-center gap-1.5 rounded-full border border-black/5 bg-white px-4 py-2 text-sm font-medium text-ink shadow-panel md:hidden"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path d="M3 6h18M3 12h18M3 18h18" />
+              </svg>
+              Layers &amp; legend
+            </button>
+          )}
         </main>
 
         {/* Details */}

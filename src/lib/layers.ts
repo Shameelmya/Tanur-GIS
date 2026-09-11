@@ -1,4 +1,5 @@
 import type { LayerId, EditableLayer, PlaceCategory } from "./types";
+import { ICON_COLORS } from "./mapIcons";
 
 export interface LayerConfig {
   id: LayerId;
@@ -20,7 +21,7 @@ export const LAYERS: LayerConfig[] = [
     defaultVisible: true,
     minZoom: 0,
     editable: false,
-    legendColor: "#0f766e",
+    legendColor: "#0EA5A0",
     kind: "line",
     description: "Tanur Assembly Constituency (No. 44).",
   },
@@ -64,7 +65,7 @@ export const LAYERS: LayerConfig[] = [
     defaultVisible: true,
     minZoom: 11,
     editable: true,
-    legendColor: "#ea580c",
+    legendColor: "#FF7A00",
     kind: "line",
     description: "Road network from OpenStreetMap. Click a road to view or edit.",
   },
@@ -86,7 +87,7 @@ export const LAYERS: LayerConfig[] = [
     defaultVisible: true,
     minZoom: 10,
     editable: true,
-    legendColor: "#e11d48",
+    legendColor: "#FB923C",
     kind: "point",
     description: "Seed from OSM — incomplete. Administrators add the rest.",
   },
@@ -97,7 +98,7 @@ export const LAYERS: LayerConfig[] = [
     defaultVisible: false,
     minZoom: 12,
     editable: true,
-    legendColor: "#0891b2",
+    legendColor: "#8B5CF6",
     kind: "point",
     description: "Schools, health facilities and government offices.",
   },
@@ -107,37 +108,48 @@ export const layerById = (id: LayerId) => LAYERS.find((l) => l.id === id)!;
 
 export const EDITABLE_LAYERS: EditableLayer[] = ["roads", "bridges", "places"];
 
-/** Distinct colour per local body (iOS-flavoured, high separation, print-safe). */
+/** Distinct, modern colour per local body — high separation, print-safe. */
 export const LOCAL_BODY_COLORS: Record<string, string> = {
-  tanur: "#2563eb", // municipality — blue
-  ozhur: "#0d9488", // teal
-  ponmundam: "#d97706", // amber
-  tanalur: "#7c3aed", // violet
-  niramaruthoor: "#db2777", // pink
-  cheriyamundam: "#16a34a", // green
+  tanur: "#4F7CFF", // municipality — indigo-blue
+  ozhur: "#12B7B0", // teal
+  ponmundam: "#FFA53D", // amber
+  tanalur: "#9B6BFF", // violet
+  niramaruthoor: "#FF5C93", // rose
+  cheriyamundam: "#31C48D", // green
 };
 
-export const SELECTED_ROAD_COLOR = "#16a34a";
+/** Google-Directions-style green used for a clicked/selected road. */
+export const SELECTED_ROAD_COLOR = "#12B76A";
 
 export const PLACE_CATEGORIES: Record<
   PlaceCategory,
-  { label: string; color: string }
+  { label: string; color: string; icon: string }
 > = {
-  school: { label: "School", color: "#2563eb" },
-  health: { label: "Health facility", color: "#e11d48" },
-  government: { label: "Government office", color: "#0f766e" },
-  public: { label: "Public institution", color: "#7c3aed" },
+  school: { label: "School / college", color: ICON_COLORS["pin-school"], icon: "pin-school" },
+  health: { label: "Health facility", color: ICON_COLORS["pin-health"], icon: "pin-health" },
+  government: { label: "Government office", color: ICON_COLORS["pin-government"], icon: "pin-government" },
+  public: { label: "Public institution", color: ICON_COLORS["pin-public"], icon: "pin-public" },
 };
+
+/** Extra marker kinds shown in the legend alongside the four broad categories. */
+export const EXTRA_ICONS: { label: string; icon: string; color: string }[] = [
+  { label: "Police station", icon: "pin-police", color: ICON_COLORS["pin-police"] },
+  { label: "Post office", icon: "pin-post", color: ICON_COLORS["pin-post"] },
+  { label: "Court", icon: "pin-court", color: ICON_COLORS["pin-court"] },
+  { label: "Fire station", icon: "pin-fire", color: ICON_COLORS["pin-fire"] },
+  { label: "Bridge", icon: "pin-bridge", color: ICON_COLORS["pin-bridge"] },
+  { label: "Railway station", icon: "pin-railway", color: ICON_COLORS["pin-railway"] },
+];
 
 export const ROAD_STYLE: Record<
   string,
   { color: string; width: number; label: string }
 > = {
-  highway: { color: "#e8590c", width: 3.4, label: "National / State Highway" },
-  major: { color: "#f08c00", width: 2.6, label: "Major road (MDR)" },
-  connector: { color: "#f4a259", width: 1.9, label: "Connector road" },
-  local: { color: "#9aa4b2", width: 1, label: "Local road" },
-  service: { color: "#c2cad4", width: 0.8, label: "Service road" },
-  track: { color: "#c2cad4", width: 0.8, label: "Track" },
-  path: { color: "#cfd6de", width: 0.6, label: "Path" },
+  highway: { color: "#FF7A00", width: 3.4, label: "National / State Highway" },
+  major: { color: "#FFA940", width: 2.6, label: "Major road (MDR)" },
+  connector: { color: "#FFC069", width: 1.9, label: "Connector road" },
+  local: { color: "#98A2B3", width: 1, label: "Local road" },
+  service: { color: "#CBD3DB", width: 0.8, label: "Service road" },
+  track: { color: "#CBD3DB", width: 0.8, label: "Track" },
+  path: { color: "#D8DEE5", width: 0.6, label: "Path" },
 };

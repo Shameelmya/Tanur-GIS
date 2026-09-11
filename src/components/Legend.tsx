@@ -1,59 +1,78 @@
 "use client";
 
 import { useState } from "react";
-import { ROAD_STYLE, PLACE_CATEGORIES } from "@/lib/layers";
+import { ROAD_STYLE, PLACE_CATEGORIES, EXTRA_ICONS } from "@/lib/layers";
+
+/** A small teardrop "pin" swatch matching the real map markers. */
+function PinSwatch({ color }: { color: string }) {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" className="shrink-0">
+      <path
+        d="M12 1.5c5 0 8.5 3.8 8.5 8.3 0 6-8.5 12.7-8.5 12.7S3.5 15.8 3.5 9.8C3.5 5.3 7 1.5 12 1.5Z"
+        fill={color}
+        stroke="#fff"
+        strokeWidth="1.2"
+      />
+    </svg>
+  );
+}
 
 export function Legend() {
   const [open, setOpen] = useState(true);
   return (
-    <section className="rounded-xl border border-line bg-white shadow-panel">
+    <section className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white/95 shadow-panel backdrop-blur">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wide text-ink-faint"
+        className="flex w-full items-center justify-between px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.09em] text-ink-faint"
       >
         Legend
         <span className="text-ink-faint">{open ? "–" : "+"}</span>
       </button>
       {open && (
-        <div className="space-y-3 border-t border-line px-3 py-2.5 text-xs">
+        <div className="space-y-3.5 border-t border-black/[0.05] px-4 py-3 text-xs">
           <div>
-            <p className="mb-1 font-medium text-ink-soft">Roads</p>
-            <ul className="space-y-1">
+            <p className="mb-1.5 font-medium text-ink-soft">Roads</p>
+            <ul className="space-y-1.5">
               {Object.entries(ROAD_STYLE)
                 .filter(([k]) => ["highway", "major", "connector", "local"].includes(k))
                 .map(([k, s]) => (
                   <li key={k} className="flex items-center gap-2">
                     <span
-                      className="inline-block h-1 w-6 rounded-full"
-                      style={{ background: s.color, height: Math.max(2, s.width) }}
+                      className="inline-block w-6 shrink-0 rounded-full"
+                      style={{ background: s.color, height: Math.max(2.5, s.width) }}
                     />
                     <span className="text-ink-faint">{s.label}</span>
                   </li>
                 ))}
+              <li className="flex items-center gap-2">
+                <span className="inline-block h-[3px] w-6 shrink-0 rounded-full bg-[#12B76A]" />
+                <span className="text-ink-faint">Selected road</span>
+              </li>
             </ul>
           </div>
+
           <div>
-            <p className="mb-1 font-medium text-ink-soft">Important places</p>
-            <ul className="grid grid-cols-2 gap-1">
-              {Object.entries(PLACE_CATEGORIES).map(([k, v]) => (
-                <li key={k} className="flex items-center gap-1.5">
-                  <span
-                    className="inline-block h-2.5 w-2.5 rounded-full border border-white"
-                    style={{ background: v.color, boxShadow: "0 0 0 1px #cbd5e1" }}
-                  />
+            <p className="mb-1.5 font-medium text-ink-soft">Important places</p>
+            <ul className="grid grid-cols-2 gap-1.5">
+              {Object.values(PLACE_CATEGORIES).map((v) => (
+                <li key={v.label} className="flex items-center gap-1.5">
+                  <PinSwatch color={v.color} />
+                  <span className="text-ink-faint">{v.label}</span>
+                </li>
+              ))}
+              {EXTRA_ICONS.map((v) => (
+                <li key={v.label} className="flex items-center gap-1.5">
+                  <PinSwatch color={v.color} />
                   <span className="text-ink-faint">{v.label}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#dc2626] ring-1 ring-[#cbd5e1]" />
-            <span className="text-ink-faint">Bridge (seed / added)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-2 w-6 rounded-full bg-[#475569]" />
-            <span className="text-ink-faint">Railway</span>
-          </div>
+
+          <p className="rounded-lg bg-surface-muted px-2.5 py-1.5 text-[10.5px] leading-snug text-ink-faint">
+            Tip: press and hold a place or bridge marker for 3 seconds to open
+            directions in Google Maps.
+          </p>
         </div>
       )}
     </section>
