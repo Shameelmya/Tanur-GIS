@@ -11,6 +11,8 @@ export function LayerPanel({
   zoom,
   localBodyBorderOnly,
   onToggleBorderOnly,
+  showBuildings,
+  onToggleBuildings,
 }: {
   visibility: Record<LayerId, boolean>;
   onToggle: (id: LayerId) => void;
@@ -18,6 +20,8 @@ export function LayerPanel({
   zoom: number;
   localBodyBorderOnly: boolean;
   onToggleBorderOnly: () => void;
+  showBuildings: boolean;
+  onToggleBuildings: () => void;
 }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white/95 shadow-panel backdrop-blur">
@@ -81,6 +85,17 @@ export function LayerPanel({
           );
         })}
       </ul>
+      <div className="border-t border-black/[0.05]">
+        <label className="flex cursor-pointer items-start gap-3 px-4 py-2.5 transition-colors hover:bg-black/[0.02]">
+          <Toggle checked={showBuildings} onChange={onToggleBuildings} />
+          <span className="min-w-0 flex-1">
+            <span className="text-[13px] font-medium text-ink">Basemap buildings</span>
+            <span className="mt-0.5 block text-[11px] leading-snug text-ink-faint">
+              Building footprints from the Streets basemap
+            </span>
+          </span>
+        </label>
+      </div>
     </section>
   );
 }

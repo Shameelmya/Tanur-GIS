@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import * as turf from "@turf/turf";
 import { EDITABLE_LAYERS } from "@/lib/layers";
 import { useAuth } from "@/lib/auth";
 import { loadAudit, saveRecord, setArchived } from "@/lib/store";
@@ -145,6 +146,15 @@ export function DetailsPanel({
     return n || (layer === "roads" ? "Unnamed Road" : layer === "bridges" ? "Unnamed Bridge" : "Unnamed");
   }, [layer, props]);
 
+  const googleMapsUrl = useMemo(() => {
+    try {
+      const [lng, lat] = turf.centroid(feature as unknown as turf.AllGeoJSON).geometry.coordinates;
+      return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    } catch {
+      return null;
+    }
+  }, [feature]);
+
   const dirty = useMemo(
     () => fields.some((f) => f.editable && String(props[f.key] ?? "") !== (form[f.key] ?? "")),
     [fields, form, props]
@@ -230,6 +240,20 @@ export function DetailsPanel({
               </span>
             )}
           </div>
+          {googleMapsUrl && (
+            <a
+              href={googleMapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1 text-[11px] font-medium text-ink-soft hover:bg-surface-sunken"
+            >
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11Z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+              Open in Google Maps
+            </a>
+          )}
         </div>
         <button
           onClick={onClose}

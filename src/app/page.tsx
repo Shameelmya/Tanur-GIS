@@ -27,6 +27,7 @@ export default function HomePage() {
 
   const [visibility, setVisibility] = useState<Record<LayerId, boolean>>(initialVisibility);
   const [localBodyBorderOnly, setLocalBodyBorderOnly] = useState(false);
+  const [showBuildings, setShowBuildings] = useState(true);
   const [selected, setSelected] = useState<Selection | null>(null);
   const [draw, setDraw] = useState<DrawState | null>(null);
   const [pending, setPending] = useState<{ layer: EditableLayer; geometry: Geometry } | null>(null);
@@ -110,6 +111,8 @@ export default function HomePage() {
               zoom={zoom}
               localBodyBorderOnly={localBodyBorderOnly}
               onToggleBorderOnly={() => setLocalBodyBorderOnly((v) => !v)}
+              showBuildings={showBuildings}
+              onToggleBuildings={() => setShowBuildings((v) => !v)}
             />
             <Legend />
             {isAdmin && (
@@ -143,6 +146,7 @@ export default function HomePage() {
             selected={selected}
             draw={draw}
             localBodyBorderOnly={localBodyBorderOnly}
+            showBuildings={showBuildings}
             onSelect={handleSelect}
             onDrawComplete={handleDrawComplete}
             onZoom={setZoom}

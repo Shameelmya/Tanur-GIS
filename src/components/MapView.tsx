@@ -55,11 +55,17 @@ interface Props {
   selected: Selection | null;
   draw: DrawState | null;
   localBodyBorderOnly: boolean;
+  showBuildings: boolean;
   onSelect: (s: Selection | null) => void;
   onDrawComplete: (geometry: Geometry) => void;
   onReady?: () => void;
   onZoom?: (z: number) => void;
 }
+
+// The two OpenFreeMap Liberty layers that draw building footprints — hidden
+// via the "Basemap buildings" toggle. No-ops on the plain basemap, which has
+// neither layer.
+const BUILDING_LAYER_IDS = ["building", "building-3d"];
 
 const INTERACTIVE_ORDER: LayerId[] = [
   "places",
@@ -77,6 +83,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
     selected,
     draw,
     localBodyBorderOnly,
+    showBuildings,
     onSelect,
     onDrawComplete,
     onReady,
@@ -92,6 +99,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   const collectionsRef = useRef(collections);
   const selectedRef = useRef(selected);
   const visibilityRef = useRef(visibility);
+  const showBuildingsRef = useRef(showBuildings);
   const prevRoadIdRef = useRef<string | null>(null);
   const pulseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [, force] = useState(0);
@@ -120,6 +128,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   collectionsRef.current = collections;
   selectedRef.current = selected;
   visibilityRef.current = visibility;
+  showBuildingsRef.current = showBuildings;
 
   /* ----------------------------- bootstrap ----------------------------- */
   useEffect(() => {
@@ -240,6 +249,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
     }
     applyVisibility(map);
     applyBorderOnly(map);
+    applyBuildingVisibility(map);
     updateHighlight(map);
     updateDrawPreview(map);
   }, []);
@@ -260,6 +270,17 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   useEffect(() => {
     if (mapRef.current && loadedRef.current) applyVisibility(mapRef.current);
   }, [visibility, applyVisibility]);
+
+  /* ------------------------- basemap buildings ------------------------ */
+  const applyBuildingVisibility = useCallback((map: maplibregl.Map) => {
+    const vis = showBuildingsRef.current ? "visible" : "none";
+    for (const id of BUILDING_LAYER_IDS) {
+      if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", vis);
+    }
+  }, []);
+  useEffect(() => {
+    if (mapRef.current && loadedRef.current) applyBuildingVisibility(mapRef.current);
+  }, [showBuildings, applyBuildingVisibility]);
 
   /* ------------------------ local-body border-only ------------------- */
   const applyBorderOnly = useCallback((map: maplibregl.Map) => {
