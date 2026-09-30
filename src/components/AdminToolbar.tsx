@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { DrawState } from "@/components/MapView";
 import { parseLatLng } from "@/lib/geo";
+import { parseKmlLineString } from "@/lib/kml";
 import type { EditableLayer } from "@/lib/types";
 
 const ACTIONS: { mode: "point" | "line"; layer: EditableLayer; label: string }[] = [
@@ -23,6 +24,7 @@ export function AdminToolbar({
   onUndoVertex,
   onCancel,
   onAddAtCoordinates,
+  onAddRoadFromKml,
 }: {
   activeDraw: DrawState | null;
   onStartDraw: (mode: "point" | "line", layer: EditableLayer) => void;
@@ -30,10 +32,13 @@ export function AdminToolbar({
   onUndoVertex: () => void;
   onCancel: () => void;
   onAddAtCoordinates: (layer: EditableLayer, lat: number, lng: number) => void;
+  onAddRoadFromKml: (coordinates: [number, number][], name: string | null) => void;
 }) {
   const [coordLayer, setCoordLayer] = useState<EditableLayer>("places");
   const [coordText, setCoordText] = useState("");
   const [coordError, setCoordError] = useState<string | null>(null);
+  const [kmlError, setKmlError] = useState<string | null>(null);
+  const kmlInputRef = useRef<HTMLInputElement>(null);
 
   function submitCoordinates() {
     const parsed = parseLatLng(coordText);
@@ -45,6 +50,21 @@ export function AdminToolbar({
     setCoordText("");
     onAddAtCoordinates(coordLayer, parsed.lat, parsed.lng);
   }
+
+  async function handleKmlFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    const text = await file.text();
+    const parsed = parseKmlLineString(text);
+    if (!parsed) {
+      setKmlError("No road line found in that KML file.");
+      return;
+    }
+    setKmlError(null);
+    onAddRoadFromKml(parsed.coordinates, parsed.name);
+  }
+
   return (
     <section className="rounded-xl border border-brand/30 bg-brand-light/40 shadow-panel">
       <h2 className="flex items-center gap-1.5 border-b border-brand/20 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-brand-dark">
@@ -98,7 +118,21 @@ export function AdminToolbar({
                 + {a.label}
               </button>
             ))}
+            <button
+              onClick={() => kmlInputRef.current?.click()}
+              className="rounded-lg border border-brand/40 bg-white px-2.5 py-1.5 text-xs font-medium text-brand-dark hover:bg-brand-light"
+            >
+              + Add road using KML
+            </button>
+            <input
+              ref={kmlInputRef}
+              type="file"
+              accept=".kml,application/vnd.google-earth.kml+xml"
+              className="hidden"
+              onChange={handleKmlFile}
+            />
           </div>
+          {kmlError && <p className="text-[11px] text-red-600">{kmlError}</p>}
 
           <div className="space-y-1.5 border-t border-brand/20 pt-2.5">
             <p className="text-[11px] font-medium text-ink-soft">

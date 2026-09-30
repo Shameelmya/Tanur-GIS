@@ -51,18 +51,22 @@ export function NewFeatureDialog({
   layer,
   geometry,
   collections,
+  initial,
+  sourceNote,
   onClose,
   onCreated,
 }: {
   layer: EditableLayer;
   geometry: Geometry;
   collections: Record<LayerId, FeatureCollection>;
+  initial?: Record<string, string>;
+  sourceNote?: string;
   onClose: () => void;
   onCreated: (layer: EditableLayer, record: FeatureRecord) => void;
 }) {
   const { user } = useAuth();
   const cfg = CONFIG[layer];
-  const [form, setForm] = useState<Record<string, string>>({});
+  const [form, setForm] = useState<Record<string, string>>(initial ?? {});
   const [busy, setBusy] = useState(false);
 
   // Auto-detect local body + ward from the geometry.
@@ -107,7 +111,7 @@ export function NewFeatureDialog({
           ...Object.fromEntries(Object.entries(form).map(([k, v]) => [k, v.trim()])),
           verified: false,
           named: Boolean((form.name ?? "").trim()),
-          source: "Manual entry (administrator)",
+          source: sourceNote ?? "Manual entry (administrator)",
           source_date: new Date().toISOString().slice(0, 10),
         },
       };

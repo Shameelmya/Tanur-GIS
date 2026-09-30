@@ -30,7 +30,12 @@ export default function HomePage() {
   const [showBuildings, setShowBuildings] = useState(true);
   const [selected, setSelected] = useState<Selection | null>(null);
   const [draw, setDraw] = useState<DrawState | null>(null);
-  const [pending, setPending] = useState<{ layer: EditableLayer; geometry: Geometry } | null>(null);
+  const [pending, setPending] = useState<{
+    layer: EditableLayer;
+    geometry: Geometry;
+    initial?: Record<string, string>;
+    sourceNote?: string;
+  } | null>(null);
   const [zoom, setZoom] = useState(11.4);
   const [mobilePanel, setMobilePanel] = useState<"map" | "layers">("map");
 
@@ -83,6 +88,19 @@ export default function HomePage() {
     setDraw(null);
     mapRef.current?.flyToFeature({ type: "Feature", geometry, properties: { id: "" } });
     setPending({ layer, geometry });
+  }, []);
+
+  const addRoadFromKml = useCallback((coordinates: [number, number][], name: string | null) => {
+    const geometry: Geometry = { type: "LineString", coordinates };
+    setSelected(null);
+    setDraw(null);
+    mapRef.current?.flyToFeature({ type: "Feature", geometry, properties: { id: "" } });
+    setPending({
+      layer: "roads",
+      geometry,
+      initial: name ? { name } : undefined,
+      sourceNote: "Manual entry (administrator) — KML import",
+    });
   }, []);
 
   const zoomHint = useMemo(() => {
@@ -142,6 +160,7 @@ export default function HomePage() {
                 onUndoVertex={() => mapRef.current?.undoVertex()}
                 onCancel={() => setDraw(null)}
                 onAddAtCoordinates={addAtCoordinates}
+                onAddRoadFromKml={addRoadFromKml}
               />
             )}
           </div>
@@ -210,6 +229,8 @@ export default function HomePage() {
           layer={pending.layer}
           geometry={pending.geometry}
           collections={gis.collections}
+          initial={pending.initial}
+          sourceNote={pending.sourceNote}
           onClose={() => setPending(null)}
           onCreated={(layer, rec) => {
             gis.applyRecord(layer, rec);
