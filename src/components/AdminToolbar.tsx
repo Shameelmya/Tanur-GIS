@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import type { DrawState } from "@/components/MapView";
+import { parseLatLng } from "@/lib/geo";
 import type { EditableLayer } from "@/lib/types";
 
 const ACTIONS: { mode: "point" | "line"; layer: EditableLayer; label: string }[] = [
@@ -9,19 +11,40 @@ const ACTIONS: { mode: "point" | "line"; layer: EditableLayer; label: string }[]
   { mode: "point", layer: "places", label: "Add place" },
 ];
 
+const COORD_LAYERS: { layer: EditableLayer; label: string }[] = [
+  { layer: "places", label: "Place" },
+  { layer: "bridges", label: "Bridge" },
+];
+
 export function AdminToolbar({
   activeDraw,
   onStartDraw,
   onFinishLine,
   onUndoVertex,
   onCancel,
+  onAddAtCoordinates,
 }: {
   activeDraw: DrawState | null;
   onStartDraw: (mode: "point" | "line", layer: EditableLayer) => void;
   onFinishLine: () => void;
   onUndoVertex: () => void;
   onCancel: () => void;
+  onAddAtCoordinates: (layer: EditableLayer, lat: number, lng: number) => void;
 }) {
+  const [coordLayer, setCoordLayer] = useState<EditableLayer>("places");
+  const [coordText, setCoordText] = useState("");
+  const [coordError, setCoordError] = useState<string | null>(null);
+
+  function submitCoordinates() {
+    const parsed = parseLatLng(coordText);
+    if (!parsed) {
+      setCoordError("Paste coordinates like 11.0021, 75.8734");
+      return;
+    }
+    setCoordError(null);
+    setCoordText("");
+    onAddAtCoordinates(coordLayer, parsed.lat, parsed.lng);
+  }
   return (
     <section className="rounded-xl border border-brand/30 bg-brand-light/40 shadow-panel">
       <h2 className="flex items-center gap-1.5 border-b border-brand/20 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-brand-dark">
@@ -64,16 +87,60 @@ export function AdminToolbar({
           </div>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-2 px-3 py-2.5">
-          {ACTIONS.map((a) => (
-            <button
-              key={a.label}
-              onClick={() => onStartDraw(a.mode, a.layer)}
-              className="rounded-lg border border-brand/40 bg-white px-2.5 py-1.5 text-xs font-medium text-brand-dark hover:bg-brand-light"
-            >
-              + {a.label}
-            </button>
-          ))}
+        <div className="space-y-2.5 px-3 py-2.5">
+          <div className="flex flex-wrap gap-2">
+            {ACTIONS.map((a) => (
+              <button
+                key={a.label}
+                onClick={() => onStartDraw(a.mode, a.layer)}
+                className="rounded-lg border border-brand/40 bg-white px-2.5 py-1.5 text-xs font-medium text-brand-dark hover:bg-brand-light"
+              >
+                + {a.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="space-y-1.5 border-t border-brand/20 pt-2.5">
+            <p className="text-[11px] font-medium text-ink-soft">
+              Add from Google Maps coordinates
+            </p>
+            <div className="flex gap-1">
+              {COORD_LAYERS.map((p) => (
+                <button
+                  key={p.layer}
+                  onClick={() => setCoordLayer(p.layer)}
+                  className={`rounded-full border px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                    coordLayer === p.layer
+                      ? "border-brand bg-brand text-white"
+                      : "border-line bg-white text-ink-soft hover:bg-surface-sunken"
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-1.5">
+              <input
+                value={coordText}
+                onChange={(e) => {
+                  setCoordText(e.target.value);
+                  setCoordError(null);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") submitCoordinates();
+                }}
+                placeholder="11.0021, 75.8734"
+                className="min-w-0 flex-1 rounded-lg border border-line px-2 py-1.5 text-xs outline-none focus:border-brand"
+              />
+              <button
+                onClick={submitCoordinates}
+                className="shrink-0 rounded-lg bg-brand px-2.5 py-1.5 text-xs font-medium text-white hover:bg-brand-dark"
+              >
+                Go
+              </button>
+            </div>
+            {coordError && <p className="text-[11px] text-red-600">{coordError}</p>}
+          </div>
         </div>
       )}
     </section>

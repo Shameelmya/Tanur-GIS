@@ -67,6 +67,24 @@ export default function HomePage() {
     setMobilePanel("map");
   }, [visibility]);
 
+  const goToCoordinate = useCallback((lat: number, lng: number) => {
+    setSelected(null);
+    mapRef.current?.flyToFeature({
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [lng, lat] },
+      properties: { id: "" },
+    });
+    setMobilePanel("map");
+  }, []);
+
+  const addAtCoordinates = useCallback((layer: EditableLayer, lat: number, lng: number) => {
+    const geometry: Geometry = { type: "Point", coordinates: [lng, lat] };
+    setSelected(null);
+    setDraw(null);
+    mapRef.current?.flyToFeature({ type: "Feature", geometry, properties: { id: "" } });
+    setPending({ layer, geometry });
+  }, []);
+
   const zoomHint = useMemo(() => {
     const hidden = LAYERS.filter(
       (l) => visibility[l.id] && zoom < l.minZoom - 0.5
@@ -82,6 +100,7 @@ export default function HomePage() {
         constituency={gis.collections.constituency?.features?.[0]?.properties as Record<string, unknown> | undefined}
         collections={gis.collections}
         onPick={flyTo}
+        onGoToCoordinate={goToCoordinate}
       />
 
       <div className="relative flex min-h-0 flex-1">
@@ -122,6 +141,7 @@ export default function HomePage() {
                 onFinishLine={() => mapRef.current?.finishDrawing()}
                 onUndoVertex={() => mapRef.current?.undoVertex()}
                 onCancel={() => setDraw(null)}
+                onAddAtCoordinates={addAtCoordinates}
               />
             )}
           </div>

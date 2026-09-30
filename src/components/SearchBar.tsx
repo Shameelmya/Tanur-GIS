@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import type { FeatureCollection } from "geojson";
 import { LAYERS } from "@/lib/layers";
+import { parseLatLng } from "@/lib/geo";
 import type { GeoFeature, LayerId, Selection } from "@/lib/types";
 
 interface Row {
@@ -17,11 +18,13 @@ const SEARCHABLE: LayerId[] = ["roads", "bridges", "places", "wards", "local_bod
 export function SearchBar({
   collections,
   onPick,
+  onGoToCoordinate,
   autoFocus,
   placeholder,
 }: {
   collections: Record<LayerId, FeatureCollection>;
   onPick: (s: Selection) => void;
+  onGoToCoordinate?: (lat: number, lng: number) => void;
   autoFocus?: boolean;
   placeholder?: string;
 }) {
@@ -67,6 +70,8 @@ export function SearchBar({
     }
     return rows;
   }, [collections]);
+
+  const coordMatch = useMemo(() => parseLatLng(q), [q]);
 
   const results = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -124,8 +129,30 @@ export function SearchBar({
           className="w-full bg-transparent text-sm outline-none placeholder:text-ink-faint"
         />
       </div>
-      {focus && results.length > 0 && (
+      {focus && (coordMatch || results.length > 0) && (
         <ul className="absolute inset-x-0 top-full z-40 mt-1 max-h-80 overflow-y-auto rounded-lg border border-line bg-white py-1 shadow-panel panel-scroll">
+          {coordMatch && (
+            <li>
+              <button
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  onGoToCoordinate?.(coordMatch.lat, coordMatch.lng);
+                  setQ("");
+                  setFocus(false);
+                }}
+                className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-surface-muted"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-brand" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+                <span className="min-w-0 flex-1 truncate text-ink">
+                  Go to {coordMatch.lat.toFixed(5)}, {coordMatch.lng.toFixed(5)}
+                </span>
+                <span className="shrink-0 text-[11px] text-ink-faint">Coordinates</span>
+              </button>
+            </li>
+          )}
           {results.map((r, i) => (
             <li key={`${r.layer}-${r.label}-${i}`}>
               <button
@@ -142,7 +169,7 @@ export function SearchBar({
           ))}
         </ul>
       )}
-      {focus && q.trim().length >= 2 && results.length === 0 && (
+      {focus && !coordMatch && q.trim().length >= 2 && results.length === 0 && (
         <div className="absolute inset-x-0 top-full z-40 mt-1 rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink-faint shadow-panel">
           No matches for “{q}”.
         </div>

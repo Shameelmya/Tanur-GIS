@@ -11,10 +11,12 @@ export function Header({
   constituency,
   collections,
   onPick,
+  onGoToCoordinate,
 }: {
   constituency?: Record<string, unknown>;
   collections: Record<LayerId, FeatureCollection>;
   onPick: (s: Selection) => void;
+  onGoToCoordinate?: (lat: number, lng: number) => void;
 }) {
   const [mobileSearch, setMobileSearch] = useState(false);
 
@@ -36,6 +38,10 @@ export function Header({
             collections={collections}
             onPick={(s) => {
               onPick(s);
+              setMobileSearch(false);
+            }}
+            onGoToCoordinate={(lat, lng) => {
+              onGoToCoordinate?.(lat, lng);
               setMobileSearch(false);
             }}
             autoFocus
@@ -66,7 +72,7 @@ export function Header({
       </div>
 
       <div className="mx-auto hidden max-w-md flex-1 md:block">
-        <SearchBar collections={collections} onPick={onPick} />
+        <SearchBar collections={collections} onPick={onPick} onGoToCoordinate={onGoToCoordinate} placeholder="Search, or paste Google Maps coordinates…" />
       </div>
 
       <button
