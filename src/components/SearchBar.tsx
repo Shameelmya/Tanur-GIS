@@ -71,9 +71,24 @@ export function SearchBar({
   const results = useMemo(() => {
     const term = q.trim().toLowerCase();
     if (term.length < 2) return [];
+    // Rank: exact name match first, then "starts with", then where the term
+    // appears, then a small boost for local bodies / wards (the searchable
+    // administrative boundaries) so e.g. searching a panchayat's name finds
+    // the panchayat itself ahead of a place that merely contains that word.
+    const score = (r: Row) => {
+      const label = r.label.toLowerCase();
+      const idx = label.indexOf(term);
+      const layerBoost = r.layer === "local_bodies" ? 0 : r.layer === "wards" ? 1 : 2;
+      if (label === term) return [0, layerBoost, 0];
+      if (label.startsWith(term)) return [1, layerBoost, 0];
+      return [2, layerBoost, idx];
+    };
     return index
       .filter((r) => r.label.toLowerCase().includes(term))
-      .sort((a, b) => a.label.toLowerCase().indexOf(term) - b.label.toLowerCase().indexOf(term))
+      .sort((a, b) => {
+        const sa = score(a), sb = score(b);
+        return sa[0] - sb[0] || sa[1] - sb[1] || sa[2] - sb[2];
+      })
       .slice(0, 12);
   }, [q, index]);
 

@@ -1050,8 +1050,8 @@ function ensureAppLayers(map: maplibregl.Map) {
     layout: { "line-join": "round", "line-cap": "round" },
     paint: {
       "line-color": "#ffffff",
-      "line-width": ["interpolate", ["linear"], ["zoom"], 10, 3.5, 14, 6.5],
-      "line-opacity": 0.8,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 10, 5, 14, 8.5],
+      "line-opacity": 0.85,
     },
   });
   add({
@@ -1061,8 +1061,8 @@ function ensureAppLayers(map: maplibregl.Map) {
     layout: { "line-join": "round", "line-cap": "round" },
     paint: {
       "line-color": lbColorMatch(),
-      "line-width": ["interpolate", ["linear"], ["zoom"], 10, 2.2, 14, 4],
-      "line-opacity": 0.95,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 10, 3, 14, 5.5],
+      "line-opacity": 1,
     },
   });
 

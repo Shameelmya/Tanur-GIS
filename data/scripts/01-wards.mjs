@@ -9,7 +9,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import mapshaper from "mapshaper";
 import {
-  RAW, PROCESSED, LOCAL_BODIES, readJSON, writeJSON, fc, round6,
+  RAW, PROCESSED, LOCAL_BODIES, readJSON, writeJSON, fc, round6, fixWinding,
   slugify, titleCase, log, today,
 } from "./lib.mjs";
 
@@ -88,7 +88,7 @@ async function build() {
   );
   const cleanFc = JSON.parse(cleaned["out.geojson"]);
   const out = cleanFc.type === "FeatureCollection" ? cleanFc : fc(features);
-  writeJSON(join(PROCESSED, "wards.geojson"), out);
+  writeJSON(join(PROCESSED, "wards.geojson"), fixWinding(out));
   writeJSON(join(PROCESSED, "wards.geojson.meta.json"), {
     dataset: "wards",
     features: features.length,

@@ -9,7 +9,7 @@
 import { join } from "node:path";
 import mapshaper from "mapshaper";
 import {
-  PROCESSED, LOCAL_BODIES, readJSON, writeJSON, fc, round6, log, today,
+  PROCESSED, LOCAL_BODIES, readJSON, writeJSON, fc, round6, fixWinding, log, today,
 } from "./lib.mjs";
 
 const NAME_ML = {
@@ -61,7 +61,7 @@ const features = LOCAL_BODIES.map((lb) => {
   };
 });
 
-writeJSON(join(PROCESSED, "local_bodies.geojson"), fc(features));
+writeJSON(join(PROCESSED, "local_bodies.geojson"), fixWinding(fc(features)));
 writeJSON(join(PROCESSED, "local_bodies.geojson.meta.json"), {
   dataset: "local_bodies",
   features: features.length,

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-11T10:02:49.013Z",
+  "generated": "2026-09-30T09:32:44.091Z",
   "constituency": {
     "id": "tanur-ac-44",
     "name": "Tanur",
@@ -22,7 +22,7 @@
     ],
     "source": "Derived: union of the six component Local Self Government Institutions (themselves dissolved from 2024 Delimitation Commission ward polygons). Composition per ECI Delimitation of Constituencies Order 2008 (via Wikipedia; pending cross-check against the original notification).",
     "confidence": "medium-high",
-    "acquired": "2026-09-11"
+    "acquired": "2026-09-30"
   },
   "layers": [
     {
@@ -35,14 +35,14 @@
       "dataset": "constituency",
       "method": "dissolve2 of processed/local_bodies.geojson",
       "area_km2": 82.5,
-      "generated": "2026-09-11T07:23:45.230Z"
+      "generated": "2026-09-30T09:32:30.972Z"
     },
     {
       "name": "local_bodies",
       "features": 6,
       "dataset": "local_bodies",
       "method": "dissolve2 of processed/wards.geojson grouped by local body",
-      "generated": "2026-09-09T10:09:05.395Z"
+      "generated": "2026-09-30T09:32:29.901Z"
     },
     {
       "name": "wards",
@@ -51,7 +51,7 @@
       "local_bodies": 6,
       "source": "Delimitation Commission, Kerala (2024) via wardmap.ksmart.live",
       "license": "Government of Kerala data — attribute to the Delimitation Commission; reuse terms to be confirmed",
-      "generated": "2026-09-09T09:30:08.995Z"
+      "generated": "2026-09-30T09:32:24.670Z"
     },
     {
       "name": "water",
@@ -59,7 +59,7 @@
       "dataset": "water",
       "source": "OpenStreetMap via Overpass API",
       "license": "ODbL 1.0",
-      "generated": "2026-09-09T09:55:50.071Z"
+      "generated": "2026-09-30T09:32:32.106Z"
     },
     {
       "name": "roads",

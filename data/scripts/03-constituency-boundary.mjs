@@ -10,7 +10,7 @@ import { join } from "node:path";
 import mapshaper from "mapshaper";
 import * as turf from "@turf/turf";
 import {
-  PROCESSED, CONSTITUENCY, LOCAL_BODIES, readJSON, writeJSON, fc, round6, log, today,
+  PROCESSED, CONSTITUENCY, LOCAL_BODIES, readJSON, writeJSON, fc, round6, fixWinding, log, today,
 } from "./lib.mjs";
 
 const localBodies = readJSON(join(PROCESSED, "local_bodies.geojson"));
@@ -54,10 +54,11 @@ const feature = {
   geometry,
 };
 
-writeJSON(join(PROCESSED, "constituency.geojson"), fc([feature]));
-
 // Inverted mask: a world-covering polygon with the constituency punched out,
-// used to grey-out everything outside the constituency on the map.
+// used to grey-out everything outside the constituency on the map. Built
+// from the original (pre-rewind) `geometry` — this ring math is independent
+// of fixWinding, so it must run before fixWinding touches `feature.geometry`
+// (the same object, mutated in place).
 const outerRing = [
   [-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85],
 ];
@@ -79,6 +80,13 @@ writeJSON(
     },
   ])
 );
+
+// constituency.geojson itself is only ever line-rendered today, but fix its
+// winding too so it's safe if a fill layer ever uses it. Written last since
+// fixWinding mutates feature.geometry in place (same object as `geometry`
+// above, already consumed by the mask code).
+writeJSON(join(PROCESSED, "constituency.geojson"), fixWinding(fc([feature])));
+
 writeJSON(join(PROCESSED, "constituency.geojson.meta.json"), {
   dataset: "constituency",
   method: "dissolve2 of processed/local_bodies.geojson",

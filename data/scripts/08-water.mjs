@@ -6,7 +6,7 @@
 import { join } from "node:path";
 import mapshaper from "mapshaper";
 import {
-  PROCESSED, BBOX, overpass, readJSON, writeJSON, fc, round6, titleCase, log, today,
+  PROCESSED, BBOX, overpass, readJSON, writeJSON, fc, round6, fixWinding, titleCase, log, today,
 } from "./lib.mjs";
 
 const Q = `[out:json][timeout:180];
@@ -62,7 +62,7 @@ async function clip(features) {
 }
 
 const outFeatures = [...(await clip(polys)), ...(await clip(lines))];
-writeJSON(join(PROCESSED, "water.geojson"), round6(fc(outFeatures)));
+writeJSON(join(PROCESSED, "water.geojson"), fixWinding(round6(fc(outFeatures))));
 writeJSON(join(PROCESSED, "water.geojson.meta.json"), {
   dataset: "water",
   features: outFeatures.length,

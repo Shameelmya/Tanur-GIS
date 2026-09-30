@@ -5,6 +5,7 @@
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { rewind } from "@turf/turf";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(__dirname, "..", "..");
@@ -74,6 +75,25 @@ export function round6(geo) {
 
 export function fc(features) {
   return { type: "FeatureCollection", features };
+}
+
+// MapLibre GL JS's GeoJSON tiler (geojson-vt) can silently fail to produce
+// any tile geometry for a Polygon/MultiPolygon whose exterior ring winds
+// counter-clockwise — the winding RFC 7946 actually requires, so a fully
+// spec-valid ring can still render as nothing (confirmed by hand: dissolved
+// local-body polygons loaded with `state: "errored"` on 16/17 tiles until
+// their rings were reversed). Force the clockwise-exterior/CCW-hole
+// convention MapLibre expects on every Polygon/MultiPolygon before writing
+// it out. Safe to call on line/point features or a mixed collection — turf
+// leaves those untouched.
+export function fixWinding(geo) {
+  const features = geo.type === "FeatureCollection" ? geo.features : [geo];
+  for (const f of features) {
+    if (f.geometry?.type === "Polygon" || f.geometry?.type === "MultiPolygon") {
+      f.geometry = rewind(f, { reverse: true }).geometry;
+    }
+  }
+  return geo;
 }
 
 // Minimal Overpass client with mirror fallback + on-disk cache.

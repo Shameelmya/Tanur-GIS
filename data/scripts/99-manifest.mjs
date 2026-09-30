@@ -6,7 +6,7 @@
 import { join } from "node:path";
 import { copyFileSync } from "node:fs";
 import mapshaper from "mapshaper";
-import { PROCESSED, PUBLIC_DATA, readJSON, writeJSON, log } from "./lib.mjs";
+import { PROCESSED, PUBLIC_DATA, readJSON, writeJSON, fixWinding, log } from "./lib.mjs";
 
 async function simplify(name, pct) {
   const src = readJSON(join(PROCESSED, `${name}.geojson`));
@@ -18,7 +18,10 @@ async function simplify(name, pct) {
     const raw = res["out.geojson"];
     const out = raw ? JSON.parse(raw) : null;
     if (out && out.type === "FeatureCollection" && out.features.length === src.features.length) {
-      writeJSON(join(PUBLIC_DATA, `${name}.geojson`), out);
+      // mapshaper's own -clean can re-normalise ring winding to the RFC 7946
+      // (CCW-exterior) convention regardless of what we wrote in — reapply
+      // fixWinding as the last step before this reaches the browser.
+      writeJSON(join(PUBLIC_DATA, `${name}.geojson`), fixWinding(out));
       return out.features.length;
     }
   } catch (e) {
