@@ -98,6 +98,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   const rerender = () => force((n) => n + 1);
   const [basemap, setBasemap] = useState<"plain" | "streets">("plain");
   const [basemapBusy, setBasemapBusy] = useState(false);
+  const basemapKindRef = useRef<"plain" | "streets">("plain");
 
   // Hold-to-open-directions (press and hold a place or bridge for 3s).
   // Driven by setTimeout/setInterval rather than requestAnimationFrame: rAF is
@@ -181,6 +182,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
       wireInteractions(map);
       onReady?.();
       onZoom?.(map.getZoom());
+      void switchBasemap("streets");
       // Kick the render loop — in a flex layout the canvas can boot at 0×0, and
       // when the tab is backgrounded requestAnimationFrame is throttled so
       // maplibre may defer its first paint. redraw() forces a synchronous frame.
@@ -358,6 +360,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   const switchBasemap = useCallback(async (kind: "plain" | "streets") => {
     const map = mapRef.current;
     if (!map || !loadedRef.current) return;
+    basemapKindRef.current = kind;
     setBasemapBusy(true);
     try {
       if (kind === "plain") {
@@ -371,15 +374,34 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
       clearTimeout(t);
       if (!res.ok) throw new Error(String(res.status));
       const style = (await res.json()) as maplibregl.StyleSpecification;
+      const basemapSourceIds = new Set(Object.keys(style.sources || {}));
       map.setStyle(style, { diff: false });
       setBasemap("streets");
-      await new Promise((r) => setTimeout(r, 8000));
-      if (mapRef.current && !mapRef.current.areTilesLoaded()) {
-        mapRef.current.setStyle(BASE_STYLE, { diff: false });
-        setBasemap("plain");
-      }
+
+      // Non-blocking fallback: revert to plain only if no tile from the
+      // basemap's own sources arrives within 15s. Runs off the critical path
+      // (via setTimeout) so the basemap toggle buttons aren't locked while we
+      // wait, and basemapKindRef guards against reverting a basemap the user
+      // has already switched away from in the meantime.
+      let tileArrived = false;
+      const onData = (e: maplibregl.MapDataEvent) => {
+        const se = e as maplibregl.MapDataEvent & { sourceId?: string; tile?: unknown };
+        if (se.dataType === "source" && se.sourceId && se.tile && basemapSourceIds.has(se.sourceId)) {
+          tileArrived = true;
+        }
+      };
+      map.on("data", onData);
+      setTimeout(() => {
+        map.off("data", onData);
+        if (!tileArrived && mapRef.current && basemapKindRef.current === "streets") {
+          mapRef.current.setStyle(BASE_STYLE, { diff: false });
+          setBasemap("plain");
+          basemapKindRef.current = "plain";
+        }
+      }, 15000);
     } catch {
       setBasemap("plain");
+      basemapKindRef.current = "plain";
     } finally {
       setBasemapBusy(false);
     }
@@ -719,9 +741,26 @@ function ensureAppLayers(map: maplibregl.Map) {
   gj("__pulse");
   registerIcons(map);
 
+  // If a basemap (e.g. Streets) is already loaded, its first symbol layer is
+  // where its own place/road labels start — computed once, before any of our
+  // own layers are added, so this never picks up one of ours.
+  const basemapFirstSymbolId = map.getStyle().layers?.find((l) => l.type === "symbol")?.id;
+  const NO_DEFAULT_BEFORE = new Set(["roads-selected"]);
+
   const add = (layer: maplibregl.LayerSpecification, before?: string) => {
-    if (!map.getLayer(layer.id))
-      map.addLayer(layer, before && map.getLayer(before) ? before : undefined);
+    if (map.getLayer(layer.id)) return;
+    let beforeId = before;
+    if (
+      !beforeId &&
+      basemapFirstSymbolId &&
+      (layer.type === "fill" || layer.type === "line") &&
+      !layer.id.startsWith("highlight-") &&
+      !layer.id.startsWith("draw-") &&
+      !NO_DEFAULT_BEFORE.has(layer.id)
+    ) {
+      beforeId = basemapFirstSymbolId;
+    }
+    map.addLayer(layer, beforeId && map.getLayer(beforeId) ? beforeId : undefined);
   };
 
   /* ---- mask: fade everything outside the constituency to greyscale ---- */
@@ -906,7 +945,12 @@ function ensureAppLayers(map: maplibregl.Map) {
     filter: ["==", ["get", "named"], true],
     layout: {
       "symbol-placement": "line",
-      "text-field": ["coalesce", ["get", "name_ml"], ["get", "name"]],
+      "text-field": [
+        "case",
+        [">", ["length", ["coalesce", ["get", "name_ml"], ""]], 0],
+        ["get", "name_ml"],
+        ["get", "name"],
+      ],
       "text-size": ["interpolate", ["linear"], ["zoom"], 12.5, 10, 16, 12.5],
       "text-font": ["Noto Sans Regular", "Open Sans Regular"],
     },
@@ -1030,7 +1074,7 @@ function ensureAppLayers(map: maplibregl.Map) {
     id: "places-label",
     type: "symbol",
     source: "places",
-    minzoom: 14.5,
+    minzoom: 13.5,
     layout: {
       "text-field": ["get", "name"],
       "text-size": 10,
