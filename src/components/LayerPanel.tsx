@@ -1,7 +1,7 @@
 "use client";
 
 import type { FeatureCollection } from "geojson";
-import { LAYERS, LOCAL_BODY_COLORS } from "@/lib/layers";
+import { LAYERS, LOCAL_BODY_COLORS, ROAD_STYLE, ROAD_CATEGORIES, type RoadCategory } from "@/lib/layers";
 import type { LayerId } from "@/lib/types";
 
 export function LayerPanel({
@@ -13,6 +13,8 @@ export function LayerPanel({
   onToggleBorderOnly,
   showBuildings,
   onToggleBuildings,
+  roadCategoryVisibility,
+  onToggleRoadCategory,
 }: {
   visibility: Record<LayerId, boolean>;
   onToggle: (id: LayerId) => void;
@@ -22,6 +24,8 @@ export function LayerPanel({
   onToggleBorderOnly: () => void;
   showBuildings: boolean;
   onToggleBuildings: () => void;
+  roadCategoryVisibility: Record<RoadCategory, boolean>;
+  onToggleRoadCategory: (category: RoadCategory) => void;
 }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white/95 shadow-panel backdrop-blur">
@@ -53,6 +57,31 @@ export function LayerPanel({
                       l.description
                     )}
                   </span>
+
+                  {l.id === "roads" && on && (
+                    <span className="mt-2 flex flex-wrap gap-1" onClick={(e) => e.preventDefault()}>
+                      {ROAD_CATEGORIES.map((c) => {
+                        const active = roadCategoryVisibility[c];
+                        return (
+                          <button
+                            key={c}
+                            onClick={() => onToggleRoadCategory(c)}
+                            className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                              active
+                                ? "border-brand bg-brand-light text-brand-dark"
+                                : "border-black/10 text-ink-faint hover:bg-black/[0.03]"
+                            }`}
+                          >
+                            <span
+                              className="inline-block h-1.5 w-3 shrink-0 rounded-sm"
+                              style={{ background: active ? ROAD_STYLE[c].color : "#cbd5e1" }}
+                            />
+                            {ROAD_STYLE[c].label}
+                          </button>
+                        );
+                      })}
+                    </span>
+                  )}
 
                   {l.id === "local_bodies" && on && (
                     <span className="mt-2 block" onClick={(e) => e.preventDefault()}>

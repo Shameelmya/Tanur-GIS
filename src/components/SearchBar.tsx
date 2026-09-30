@@ -116,6 +116,12 @@ export function SearchBar({
           onChange={(e) => {
             setQ(e.target.value);
             setActive(0);
+            // Typing always means "show me results" — relying on the native
+            // focus event alone isn't enough: after picking a result the
+            // input stays DOM-focused (we only reset our own `focus` state),
+            // so re-clicking it to search again fires no new focus event and
+            // the dropdown would otherwise stay stuck closed.
+            setFocus(true);
           }}
           onFocus={() => setFocus(true)}
           onBlur={() => setTimeout(() => setFocus(false), 150)}

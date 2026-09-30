@@ -14,8 +14,10 @@ import * as turf from "@turf/turf";
 import {
   LAYERS,
   ROAD_STYLE,
+  ROAD_CATEGORIES,
   LOCAL_BODY_COLORS,
   SELECTED_ROAD_COLOR,
+  type RoadCategory,
 } from "@/lib/layers";
 import { registerIcons } from "@/lib/mapIcons";
 import type { LayerId, GeoFeature, Selection } from "@/lib/types";
@@ -37,6 +39,30 @@ const BASE_STYLE: maplibregl.StyleSpecification = {
 
 const FIRST_APP_LAYER = "mask-outside";
 
+/** A MapLibre IControl button (grouped with the native zoom buttons) that
+ * re-fits the map to the constituency — a quick way back after panning off. */
+class ResetViewControl implements maplibregl.IControl {
+  private container?: HTMLDivElement;
+  constructor(private onClick: () => void) {}
+  onAdd() {
+    this.container = document.createElement("div");
+    this.container.className = "maplibregl-ctrl maplibregl-ctrl-group";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.title = "Reset view";
+    button.setAttribute("aria-label", "Reset view");
+    button.innerHTML =
+      '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="margin:auto"><path d="M3 12a9 9 0 1 1 3.5 7.1"/><path d="M3 5v5h5"/></svg>';
+    button.style.display = "flex";
+    button.addEventListener("click", () => this.onClick());
+    this.container.appendChild(button);
+    return this.container;
+  }
+  onRemove() {
+    this.container?.remove();
+  }
+}
+
 export interface DrawState {
   mode: "point" | "line";
   layer: "roads" | "bridges" | "places";
@@ -56,6 +82,7 @@ interface Props {
   draw: DrawState | null;
   localBodyBorderOnly: boolean;
   showBuildings: boolean;
+  roadCategoryVisibility: Record<RoadCategory, boolean>;
   onSelect: (s: Selection | null) => void;
   onDrawComplete: (geometry: Geometry) => void;
   onReady?: () => void;
@@ -84,6 +111,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
     draw,
     localBodyBorderOnly,
     showBuildings,
+    roadCategoryVisibility,
     onSelect,
     onDrawComplete,
     onReady,
@@ -100,6 +128,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   const selectedRef = useRef(selected);
   const visibilityRef = useRef(visibility);
   const showBuildingsRef = useRef(showBuildings);
+  const roadCategoryVisibilityRef = useRef(roadCategoryVisibility);
   const prevRoadIdRef = useRef<string | null>(null);
   const pulseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [, force] = useState(0);
@@ -129,6 +158,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   selectedRef.current = selected;
   visibilityRef.current = visibility;
   showBuildingsRef.current = showBuildings;
+  roadCategoryVisibilityRef.current = roadCategoryVisibility;
 
   /* ----------------------------- bootstrap ----------------------------- */
   useEffect(() => {
@@ -148,6 +178,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
       (window as unknown as { __map: maplibregl.Map }).__map = map;
     }
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+    map.addControl(new ResetViewControl(() => fitToConstituency(map)), "top-right");
     map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
     map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
 
@@ -250,6 +281,7 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
     applyVisibility(map);
     applyBorderOnly(map);
     applyBuildingVisibility(map);
+    applyRoadCategoryVisibility(map);
     updateHighlight(map);
     updateDrawPreview(map);
   }, []);
@@ -281,6 +313,25 @@ const MapView = forwardRef<MapHandle, Props>(function MapView(
   useEffect(() => {
     if (mapRef.current && loadedRef.current) applyBuildingVisibility(mapRef.current);
   }, [showBuildings, applyBuildingVisibility]);
+
+  /* ------------------------- road category filter ---------------------- */
+  const applyRoadCategoryVisibility = useCallback((map: maplibregl.Map) => {
+    const visible = ROAD_CATEGORIES.filter((c) => roadCategoryVisibilityRef.current[c]);
+    const categoryFilter: maplibregl.FilterSpecification = ["in", ["get", "category"], ["literal", visible]];
+    const casingBase: maplibregl.FilterSpecification = [
+      "match", ["get", "category"], ["highway", "major", "connector"], true, false,
+    ];
+    if (map.getLayer("roads-casing")) map.setFilter("roads-casing", ["all", casingBase, categoryFilter]);
+    if (map.getLayer("roads-line")) map.setFilter("roads-line", categoryFilter);
+    if (map.getLayer("roads-hit")) map.setFilter("roads-hit", categoryFilter);
+    if (map.getLayer("roads-selected")) map.setFilter("roads-selected", categoryFilter);
+    if (map.getLayer("roads-label")) {
+      map.setFilter("roads-label", ["all", ["==", ["get", "named"], true], categoryFilter]);
+    }
+  }, []);
+  useEffect(() => {
+    if (mapRef.current && loadedRef.current) applyRoadCategoryVisibility(mapRef.current);
+  }, [roadCategoryVisibility, applyRoadCategoryVisibility]);
 
   /* ------------------------ local-body border-only ------------------- */
   const applyBorderOnly = useCallback((map: maplibregl.Map) => {
@@ -949,6 +1000,7 @@ function ensureAppLayers(map: maplibregl.Map) {
         0.95,
         0,
       ],
+      "line-opacity-transition": { duration: 250 },
     },
   });
   add({
@@ -1153,7 +1205,7 @@ function ensureAppLayers(map: maplibregl.Map) {
     type: "fill",
     source: "__highlight",
     filter: ["match", ["geometry-type"], ["Polygon", "MultiPolygon"], true, false],
-    paint: { "fill-color": "#f59e0b", "fill-opacity": 0.16 },
+    paint: { "fill-color": "#f59e0b", "fill-opacity": 0.16, "fill-opacity-transition": { duration: 200 } },
   });
   add({
     id: "highlight-line",
@@ -1166,7 +1218,7 @@ function ensureAppLayers(map: maplibregl.Map) {
       true,
       false,
     ],
-    paint: { "line-color": "#f59e0b", "line-width": 3.5, "line-opacity": 0.95 },
+    paint: { "line-color": "#f59e0b", "line-width": 3.5, "line-opacity": 0.95, "line-opacity-transition": { duration: 200 } },
   });
   add({
     id: "highlight-point",
@@ -1179,6 +1231,8 @@ function ensureAppLayers(map: maplibregl.Map) {
       "circle-opacity": 0.22,
       "circle-stroke-color": "#f59e0b",
       "circle-stroke-width": 2.5,
+      "circle-opacity-transition": { duration: 200 },
+      "circle-stroke-opacity-transition": { duration: 200 },
     },
   });
 

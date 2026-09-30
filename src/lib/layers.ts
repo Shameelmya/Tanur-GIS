@@ -141,15 +141,19 @@ export const EXTRA_ICONS: { label: string; icon: string; color: string }[] = [
   { label: "Railway station", icon: "pin-railway", color: ICON_COLORS["pin-railway"] },
 ];
 
+export type RoadCategory = "highway" | "major" | "connector" | "local" | "service" | "track" | "path";
+
 export const ROAD_STYLE: Record<
-  string,
+  RoadCategory,
   { color: string; width: number; label: string }
 > = {
   highway: { color: "#FF7A00", width: 3.4, label: "National / State Highway" },
   major: { color: "#FFA940", width: 2.6, label: "Major road (MDR)" },
   connector: { color: "#FFC069", width: 1.9, label: "Connector road" },
-  local: { color: "#98A2B3", width: 1, label: "Local road" },
+  local: { color: "#98A2B3", width: 1, label: "Local road (Gramin)" },
   service: { color: "#CBD3DB", width: 0.8, label: "Service road" },
   track: { color: "#CBD3DB", width: 0.8, label: "Track" },
   path: { color: "#D8DEE5", width: 0.6, label: "Path" },
 };
+
+export const ROAD_CATEGORIES = Object.keys(ROAD_STYLE) as RoadCategory[];

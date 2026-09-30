@@ -1,20 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ROAD_STYLE, PLACE_CATEGORIES, EXTRA_ICONS } from "@/lib/layers";
+import { iconDataUrl } from "@/lib/mapIcons";
 
-/** A small teardrop "pin" swatch matching the real map markers. */
-function PinSwatch({ color }: { color: string }) {
-  return (
-    <svg viewBox="0 0 24 24" width="15" height="15" className="shrink-0">
-      <path
-        d="M12 1.5c5 0 8.5 3.8 8.5 8.3 0 6-8.5 12.7-8.5 12.7S3.5 15.8 3.5 9.8C3.5 5.3 7 1.5 12 1.5Z"
-        fill={color}
-        stroke="#fff"
-        strokeWidth="1.2"
+/** The exact same pin icon used on the map — rendered client-side (canvas),
+ * so it's filled in once mounted rather than during server render. */
+function PinSwatch({ icon, color }: { icon: string; color: string }) {
+  const [src, setSrc] = useState<string | null>(null);
+  useEffect(() => setSrc(iconDataUrl(icon)), [icon]);
+  if (!src) {
+    return (
+      <span
+        className="inline-block h-[18px] w-[18px] shrink-0 rounded-full"
+        style={{ background: color }}
       />
-    </svg>
-  );
+    );
+  }
+  return <img src={src} alt="" width={18} height={18} className="shrink-0" />;
 }
 
 export function Legend() {
@@ -56,13 +59,13 @@ export function Legend() {
             <ul className="grid grid-cols-2 gap-1.5">
               {Object.values(PLACE_CATEGORIES).map((v) => (
                 <li key={v.label} className="flex items-center gap-1.5">
-                  <PinSwatch color={v.color} />
+                  <PinSwatch icon={v.icon} color={v.color} />
                   <span className="text-ink-faint">{v.label}</span>
                 </li>
               ))}
               {EXTRA_ICONS.map((v) => (
                 <li key={v.label} className="flex items-center gap-1.5">
-                  <PinSwatch color={v.color} />
+                  <PinSwatch icon={v.icon} color={v.color} />
                   <span className="text-ink-faint">{v.label}</span>
                 </li>
               ))}

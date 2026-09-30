@@ -185,7 +185,7 @@ const glyphs: Record<string, Glyph> = {
   },
 };
 
-function drawPin(color: string, glyph: Glyph): { width: number; height: number; data: Uint8ClampedArray } {
+function renderPinCanvas(color: string, glyph: Glyph): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
   canvas.width = SIZE;
   canvas.height = SIZE;
@@ -221,7 +221,12 @@ function drawPin(color: string, glyph: Glyph): { width: number; height: number; 
 
   glyph(ctx, cx, cyC, r);
 
-  const img = ctx.getImageData(0, 0, SIZE, SIZE);
+  return canvas;
+}
+
+function drawPin(color: string, glyph: Glyph): { width: number; height: number; data: Uint8ClampedArray } {
+  const canvas = renderPinCanvas(color, glyph);
+  const img = canvas.getContext("2d")!.getImageData(0, 0, SIZE, SIZE);
   return { width: SIZE, height: SIZE, data: img.data };
 }
 
@@ -241,4 +246,14 @@ export function registerIcons(map: maplibregl.Map) {
 
 export function iconsRegistered() {
   return registered;
+}
+
+/** Renders one pin icon (the exact same drawing used on the map) as a PNG
+ * data URL — used by the Legend so its swatches match the real markers
+ * instead of a plain colour dot. Client-side only (uses <canvas>). */
+export function iconDataUrl(id: string): string | null {
+  const color = ICON_COLORS[id];
+  const glyph = glyphs[id];
+  if (!color || !glyph) return null;
+  return renderPinCanvas(color, glyph).toDataURL();
 }

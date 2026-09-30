@@ -9,7 +9,7 @@ import { Legend } from "@/components/Legend";
 import { DetailsPanel } from "@/components/DetailsPanel";
 import { AdminToolbar } from "@/components/AdminToolbar";
 import { NewFeatureDialog } from "@/components/NewFeatureDialog";
-import { LAYERS } from "@/lib/layers";
+import { LAYERS, ROAD_CATEGORIES, type RoadCategory } from "@/lib/layers";
 import { useGisData } from "@/lib/useGisData";
 import { useAuth } from "@/lib/auth";
 import type { EditableLayer, LayerId, Selection } from "@/lib/types";
@@ -20,6 +20,9 @@ const initialVisibility = () =>
     boolean
   >;
 
+const initialRoadCategoryVisibility = () =>
+  Object.fromEntries(ROAD_CATEGORIES.map((c) => [c, true])) as Record<RoadCategory, boolean>;
+
 export default function HomePage() {
   const gis = useGisData();
   const { isAdmin } = useAuth();
@@ -28,6 +31,9 @@ export default function HomePage() {
   const [visibility, setVisibility] = useState<Record<LayerId, boolean>>(initialVisibility);
   const [localBodyBorderOnly, setLocalBodyBorderOnly] = useState(false);
   const [showBuildings, setShowBuildings] = useState(true);
+  const [roadCategoryVisibility, setRoadCategoryVisibility] = useState<Record<RoadCategory, boolean>>(
+    initialRoadCategoryVisibility
+  );
   const [selected, setSelected] = useState<Selection | null>(null);
   const [draw, setDraw] = useState<DrawState | null>(null);
   const [pending, setPending] = useState<{
@@ -41,6 +47,10 @@ export default function HomePage() {
 
   const toggleLayer = useCallback((id: LayerId) => {
     setVisibility((v) => ({ ...v, [id]: !v[id] }));
+  }, []);
+
+  const toggleRoadCategory = useCallback((category: RoadCategory) => {
+    setRoadCategoryVisibility((v) => ({ ...v, [category]: !v[category] }));
   }, []);
 
   const handleSelect = useCallback((s: Selection | null) => {
@@ -150,6 +160,8 @@ export default function HomePage() {
               onToggleBorderOnly={() => setLocalBodyBorderOnly((v) => !v)}
               showBuildings={showBuildings}
               onToggleBuildings={() => setShowBuildings((v) => !v)}
+              roadCategoryVisibility={roadCategoryVisibility}
+              onToggleRoadCategory={toggleRoadCategory}
             />
             <Legend />
             {isAdmin && (
@@ -186,6 +198,7 @@ export default function HomePage() {
             draw={draw}
             localBodyBorderOnly={localBodyBorderOnly}
             showBuildings={showBuildings}
+            roadCategoryVisibility={roadCategoryVisibility}
             onSelect={handleSelect}
             onDrawComplete={handleDrawComplete}
             onZoom={setZoom}
